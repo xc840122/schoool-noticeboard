@@ -33,15 +33,15 @@ const data = {
       items: [
         {
           title: "Messages",
-          url: "/class/messages",
+          url: "/messages",
         },
         {
           title: "Lessons",
-          url: "/class/lessons",
+          url: "/lessons",
         },
         {
           title: "Students",
-          url: "/class/students",
+          url: "/students",
         },
       ],
     },
