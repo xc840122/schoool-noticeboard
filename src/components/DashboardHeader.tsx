@@ -38,7 +38,6 @@ const getPathItems = (path: string) => {
 const DashboardHeader = () => {
   const path = usePathname();
   const pathItems: PathItem[] = getPathItems(path) ?? [];
-  console.log(pathItems);
 
   return (
     <header className="flex h-16 shrink-0 items-center gap-2 px-4">
