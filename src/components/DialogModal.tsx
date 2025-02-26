@@ -3,17 +3,24 @@ import {
   AlertDialogContent,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
+import { Button } from "./ui/button"
 
 const DialogModal = ({
-  operation,
+  triggerButtonText,
+  triggerButtonStyles,
   children
 }: {
-  operation: string,
+  triggerButtonText: string,
+  triggerButtonStyles?: string,
   children: React.ReactNode
 }) => {
   return (
     <AlertDialog>
-      <AlertDialogTrigger>{operation}</AlertDialogTrigger>
+      <AlertDialogTrigger asChild>
+        <Button className={triggerButtonStyles}>
+          {triggerButtonText}
+        </Button>
+      </AlertDialogTrigger>
       <AlertDialogContent>
         {children}
       </AlertDialogContent>

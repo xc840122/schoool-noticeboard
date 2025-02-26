@@ -1,25 +1,20 @@
 import DashboardHeader from "@/components/DashboardHeader"
 import { DatePickerWithRange } from "@/components/DatePickerWithRange";
 import DialogCard from "@/components/DialogCard";
+import DialogModal from "@/components/DialogModal";
+import MessageForm from "@/components/forms/MessageForm";
 import Pagination from "@/components/Pagination";
 import SearchBar from "@/components/SearchBar";
 import Table from "@/components/Table";
-import { Button } from "@/components/ui/button";
 import { TableCell, TableRow } from "@/components/ui/table";
 
 
 export type MessageItem = {
   title: string;
-  class: string;
+  description: string;
   time: string;
   action: string;
 }
-
-const dialogContent = {
-  operation: 'Delete',
-  title: 'Are you absolutely sure?',
-  description: 'This action cannot be undone. This will permanently delete your account and remove your data from our servers.'
-};
 
 const columns = [
   {
@@ -27,8 +22,8 @@ const columns = [
     accessor: 'title',
   },
   {
-    header: 'Class',
-    accessor: 'class',
+    header: 'Description',
+    accessor: 'description',
   },
   {
     header: 'Time',
@@ -43,73 +38,73 @@ const columns = [
 const data = [
   {
     title: 'Message 1',
-    class: 'Important',
+    description: 'Important',
     time: '12:00 PM',
     action: 'Delete'
   },
   {
     title: 'Message 2',
-    class: 'Urgent',
+    description: 'Urgent',
     time: '12:00 PM',
     action: 'Delete'
   },
   {
     title: 'Message 3',
-    class: 'Normal',
+    description: 'Normal',
     time: '12:00 PM',
     action: 'Delete'
   },
   {
     title: 'Message 4',
-    class: 'Important',
+    description: 'Important',
     time: '12:00 PM',
     action: 'Delete'
   },
   {
     title: 'Message 5',
-    class: 'Urgent',
+    description: 'Urgent',
     time: '12:00 PM',
     action: 'Delete'
   },
   {
     title: 'Message 6',
-    class: 'Normal',
+    description: 'Normal',
     time: '12:00 PM',
     action: 'Delete'
   },
   {
     title: 'Message 7',
-    class: 'Important',
+    description: 'Important',
     time: '12:00 PM',
     action: 'Delete'
   },
   {
     title: 'Message 8',
-    class: 'Urgent',
+    description: 'Urgent',
     time: '12:00 PM',
     action: 'Delete'
   },
   {
     title: 'Message 9',
-    class: 'Normal',
+    description: 'Normal',
     time: '12:00 PM',
     action: 'Delete'
   },
   {
     title: 'Message 10',
-    class: 'Important',
+    description: 'Important',
     time: '12:00 PM',
     action: 'Delete'
   },
   {
     title: 'Message 11',
-    class: 'Urgent',
+    description: 'Urgent',
     time: '12:00 PM',
     action: 'Delete'
   },
   {
     title: 'Message 12',
-    class: 'Normal',
+    description: 'Normal',
     time: '12:00 PM',
     action: 'Delete'
   },
@@ -122,13 +117,26 @@ const renderRow = (item: MessageItem) => {
       key={item.title}
     >
       <TableCell className="font-medium">{item.title}</TableCell>
-      <TableCell>{item.class}</TableCell>
+      <TableCell>{item.description}</TableCell>
       <TableCell>{item.time}</TableCell>
       <TableCell>
-        {/* Bind FormModal to buttons */}
+        {/* Bind FormModal to buttons*/}
         {item.action ? (
           <div className="flex gap-2">
-            <DialogCard diglogContent={dialogContent} />
+            {/* Delete button and dialog */}
+            <DialogCard
+              triggerButtonText="Delete"
+              dialogTitle="Are you absolutely sure?"
+              dialogDescription="This action cannot be undone. This will permanently delete your account and remove your data from our servers."
+              cancelText="Cancel"
+              confirmText="Delete"
+            />
+            {/* Edit button and dialog */}
+            <DialogModal
+              triggerButtonText="Edit"
+            >
+              <MessageForm operationType="edit" data={{ title: item.title, description: item.description }} />
+            </DialogModal>
           </div>
         ) : null
         }
@@ -149,9 +157,12 @@ const MessagePage = async () => {
       <div className="flex flex-col md:flex-row md:justify-between items-center gap-4 w-full">
         <DatePickerWithRange className="w-full md:w-auto" />
         <SearchBar />
-        <Button className="w-full md:w-auto">
-          Create Message
-        </Button>
+        <DialogModal
+          triggerButtonText="New Message"
+          triggerButtonStyles="w-full md:w-auto"
+        >
+          <MessageForm operationType="create" />
+        </DialogModal>
       </div>
       {/* Table content */}
       <div className="w-full bg-gray-50 p-4 rounded-lg">
