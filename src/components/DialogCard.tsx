@@ -8,28 +8,30 @@ import {
 } from "@/components/ui/alert-dialog"
 import DialogModal from "./DialogModal"
 
-type DialogContent = {
-  operation: string,
-  title: string,
-  description: string
-}
-
 const DialogCard = ({
-  diglogContent
+  triggerButtonText,
+  dialogTitle,
+  dialogDescription,
+  cancelText,
+  confirmText
 }: {
-  diglogContent: DialogContent
+  triggerButtonText: string,
+  dialogTitle: string,
+  dialogDescription: string
+  cancelText: string,
+  confirmText?: string
 }) => {
   return (
-    <DialogModal operation={diglogContent.operation}>
+    <DialogModal triggerButtonText={triggerButtonText}>
       <AlertDialogHeader>
-        <AlertDialogTitle>{diglogContent.title}</AlertDialogTitle>
+        <AlertDialogTitle>{dialogTitle}</AlertDialogTitle>
         <AlertDialogDescription>
-          {diglogContent.description}
+          {dialogDescription}
         </AlertDialogDescription>
       </AlertDialogHeader>
       <AlertDialogFooter>
-        <AlertDialogCancel>Cancel</AlertDialogCancel>
-        <AlertDialogAction>Confirm</AlertDialogAction>
+        <AlertDialogCancel>{cancelText}</AlertDialogCancel>
+        <AlertDialogAction>{confirmText}</AlertDialogAction>
       </AlertDialogFooter>
     </DialogModal>
   )
