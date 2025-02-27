@@ -1,3 +1,4 @@
+'use client';
 import {
   Pagination,
   PaginationContent,
@@ -8,7 +9,8 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination"
 
-const PaginationView = async () => {
+const PaginationView = () => {
+
   return (
     <Pagination>
       <PaginationContent>
@@ -25,7 +27,7 @@ const PaginationView = async () => {
           <PaginationNext href="#" />
         </PaginationItem>
       </PaginationContent>
-    </Pagination>
+    </Pagination >
   )
 }
 

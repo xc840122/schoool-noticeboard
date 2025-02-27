@@ -2,7 +2,6 @@
 
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
-import { z } from "zod"
 import { Button } from "@/components/ui/button"
 import {
   Form,
@@ -14,27 +13,8 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { AlertDialogTitle } from "../ui/alert-dialog"
-
-// Define form schema.
-const messageFormSchema = z.object({
-  title: z.string().min(3, {
-    message: "Title must be at least 2 characters.",
-  }),
-  description: z.string().min(10, {
-    message: "Description must be at least 10 characters.",
-  }),
-  // class: z.string()
-  //   .min(2, {
-  //     message: "Class must be at least 2 characters.",
-  //   })
-  //   .regex(/^[A-Za-z0-9]+$/, {
-  //     message: "Class must contain only letters and numbers.",
-  //   }),
-  // time: z.date(),
-})
-
-// Generate a type from the schema.
-export type MessageFormValues = z.infer<typeof messageFormSchema>;
+import { MessageFormValues } from "@/types/messageType"
+import { MessageFormSchema } from "@/schemas/messageSchema"
 
 const MessageForm = ({
   operationType,
@@ -45,7 +25,7 @@ const MessageForm = ({
 }) => {
   // Define form.
   const form = useForm<MessageFormValues>({
-    resolver: zodResolver(messageFormSchema),
+    resolver: zodResolver(MessageFormSchema),
     defaultValues: {
       title: data?.title ?? '',
       description: data?.description ?? '',

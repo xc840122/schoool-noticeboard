@@ -1,3 +1,4 @@
+import { getMessageListWithPagination } from "@/app/business/messageBusiness";
 import DashboardHeader from "@/components/DashboardHeader"
 import { DatePickerWithRange } from "@/components/DatePickerWithRange";
 import DialogCard from "@/components/DialogCard";
@@ -7,14 +8,7 @@ import Pagination from "@/components/Pagination";
 import SearchBar from "@/components/SearchBar";
 import Table from "@/components/Table";
 import { TableCell, TableRow } from "@/components/ui/table";
-
-
-export type MessageItem = {
-  title: string;
-  description: string;
-  time: string;
-  action: string;
-}
+import { MessageItem } from "@/types/messageType";
 
 const columns = [
   {
@@ -35,81 +29,6 @@ const columns = [
   }
 ];
 
-const data = [
-  {
-    title: 'Message 1',
-    description: 'Important',
-    time: '12:00 PM',
-    action: 'Delete'
-  },
-  {
-    title: 'Message 2',
-    description: 'Urgent',
-    time: '12:00 PM',
-    action: 'Delete'
-  },
-  {
-    title: 'Message 3',
-    description: 'Normal',
-    time: '12:00 PM',
-    action: 'Delete'
-  },
-  {
-    title: 'Message 4',
-    description: 'Important',
-    time: '12:00 PM',
-    action: 'Delete'
-  },
-  {
-    title: 'Message 5',
-    description: 'Urgent',
-    time: '12:00 PM',
-    action: 'Delete'
-  },
-  {
-    title: 'Message 6',
-    description: 'Normal',
-    time: '12:00 PM',
-    action: 'Delete'
-  },
-  {
-    title: 'Message 7',
-    description: 'Important',
-    time: '12:00 PM',
-    action: 'Delete'
-  },
-  {
-    title: 'Message 8',
-    description: 'Urgent',
-    time: '12:00 PM',
-    action: 'Delete'
-  },
-  {
-    title: 'Message 9',
-    description: 'Normal',
-    time: '12:00 PM',
-    action: 'Delete'
-  },
-  {
-    title: 'Message 10',
-    description: 'Important',
-    time: '12:00 PM',
-    action: 'Delete'
-  },
-  {
-    title: 'Message 11',
-    description: 'Urgent',
-    time: '12:00 PM',
-    action: 'Delete'
-  },
-  {
-    title: 'Message 12',
-    description: 'Normal',
-    time: '12:00 PM',
-    action: 'Delete'
-  },
-];
-
 const renderRow = (item: MessageItem) => {
   return (
     <TableRow
@@ -118,34 +37,34 @@ const renderRow = (item: MessageItem) => {
     >
       <TableCell className="font-medium">{item.title}</TableCell>
       <TableCell>{item.description}</TableCell>
-      <TableCell>{item.time}</TableCell>
+      <TableCell>{item.time.toString()}</TableCell>
       <TableCell>
         {/* Bind FormModal to buttons*/}
-        {item.action ? (
-          <div className="flex gap-2">
-            {/* Delete button and dialog */}
-            <DialogCard
-              triggerButtonText="Delete"
-              dialogTitle="Are you absolutely sure?"
-              dialogDescription="This action cannot be undone. This will permanently delete your account and remove your data from our servers."
-              cancelText="Cancel"
-              confirmText="Delete"
-            />
-            {/* Edit button and dialog */}
-            <DialogModal
-              triggerButtonText="Edit"
-            >
-              <MessageForm operationType="edit" data={{ title: item.title, description: item.description }} />
-            </DialogModal>
-          </div>
-        ) : null
-        }
+        <div className="flex gap-2">
+          {/* Delete button and dialog */}
+          <DialogCard
+            triggerButtonText="Delete"
+            dialogTitle="Are you absolutely sure?"
+            dialogDescription="This action cannot be undone. This will permanently delete your account and remove your data from our servers."
+            cancelText="Cancel"
+            confirmText="Delete"
+          />
+          {/* Edit button and dialog */}
+          <DialogModal
+            triggerButtonText="Edit"
+          >
+            <MessageForm operationType="edit" data={{ title: item.title, description: item.description }} />
+          </DialogModal>
+        </div>
       </TableCell>
     </TableRow>
   )
 }
 
 const MessagePage = async () => {
+  // Hardcode 'Art' as className for testing only
+  const response = await getMessageListWithPagination('3A');
+  const messageList = response?.messageList || [];
 
   return (
     <div className="flex flex-col container mx-auto max-w-5xl items-center gap-4 p-2">
@@ -166,7 +85,7 @@ const MessagePage = async () => {
       </div>
       {/* Table content */}
       <div className="w-full bg-gray-50 p-4 rounded-lg">
-        <Table columns={columns} renderRow={renderRow} data={data} />
+        <Table columns={columns} renderRow={renderRow} data={messageList} />
         <Pagination />
       </div>
     </div>
