@@ -61,10 +61,22 @@ const renderRow = (item: MessageItem) => {
   )
 }
 
-const MessagePage = async () => {
-  // Hardcode 'Art' as className for testing only
-  const response = await getMessageListWithPagination('3A');
-  const messageList = response?.messageList || [];
+const MessagePage = async ({ searchParams }: {
+  searchParams: { page?: string }
+}) => {
+  // Extract page from url, defaulting to '1' if missing
+  const { page } = await searchParams;
+  const pageNum = parseInt(page ?? '1');
+
+  // Get message map, Hardcode '3A' as className for testing only
+  const messagesWithPageInfo = await getMessageListWithPagination('3A')
+    ?? new Map<number, MessageItem[]>();
+
+  // Get message list by page number
+  const messagesPerPage = messagesWithPageInfo.get(pageNum) ?? [];
+
+  //  Get total page number
+  const totalPages = messagesWithPageInfo.size;
 
   return (
     <div className="flex flex-col container mx-auto max-w-5xl items-center gap-4 p-2">
@@ -85,8 +97,8 @@ const MessagePage = async () => {
       </div>
       {/* Table content */}
       <div className="w-full bg-gray-50 p-4 rounded-lg">
-        <Table columns={columns} renderRow={renderRow} data={messageList} />
-        <Pagination />
+        <Table columns={columns} renderRow={renderRow} data={messagesPerPage} />
+        <Pagination currentPage={pageNum} totalPages={totalPages} />
       </div>
     </div>
   )

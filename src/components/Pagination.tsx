@@ -1,30 +1,85 @@
 'use client';
+
 import {
   Pagination,
   PaginationContent,
-  PaginationEllipsis,
   PaginationItem,
   PaginationLink,
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination"
+import { MAX_DISPLAY_PAGE_NUMBER } from "@/lib/settings";
+import { usePathname } from "next/navigation";
 
-const PaginationView = () => {
+
+const PaginationView = ({
+  currentPage,
+  totalPages
+}: {
+  currentPage: number,
+  totalPages: number
+}) => {
+
+  // Handle the change of the pagination
+  const path = usePathname();
+  const onPageChange = (page: number) => {
+    return `${path}?page=${page}`;
+  }
+
+  /**
+   * Handle the display of page numbers based on the following logic:
+   * 1. If the total number of pages is less than or equal to the maximum number of pages to display, show all pages.
+   * 2. If the current page is near the start, show the first few pages.
+   * 3. If the current page is near the end, show the last few pages.
+   * 4. If the current page is in the middle, show the current page with surrounding pages.
+ **/
+  const pageDisplayNumbers = (totalPages: number, currentPage: number) => {
+    // Case 1: Display all pages if totalPages is less than or equal to MAX_DISPLAY_PAGE_NUMBER
+    if (totalPages <= MAX_DISPLAY_PAGE_NUMBER) {
+      return Array.from({ length: totalPages }, (_, index) => index + 1);
+    }
+    // Case 2: Display first few pages if the current page is near the beginning
+    if (currentPage <= Math.floor(MAX_DISPLAY_PAGE_NUMBER / 2)) {
+      return Array.from({ length: MAX_DISPLAY_PAGE_NUMBER }, (_, index) => index + 1);
+    }
+    // Case 3: Display last few pages if the current page is near the end
+    if (currentPage >= totalPages - Math.floor(MAX_DISPLAY_PAGE_NUMBER / 2)) {
+      return Array.from({ length: MAX_DISPLAY_PAGE_NUMBER }, (_, index) => totalPages - MAX_DISPLAY_PAGE_NUMBER + index + 1);
+    }
+    // Case 4: Display pages centered around the current page
+    return Array.from({ length: MAX_DISPLAY_PAGE_NUMBER }, (_, index) => currentPage - Math.floor(MAX_DISPLAY_PAGE_NUMBER / 2) + index);
+  };
 
   return (
     <Pagination>
       <PaginationContent>
+        {/* Previous button, modify the default shadcnui component for disable feature */}
         <PaginationItem>
-          <PaginationPrevious href="#" />
+          <PaginationPrevious
+            disable={currentPage === 1}
+            href={onPageChange(currentPage > 1 ? currentPage - 1 : 1)}
+          />
         </PaginationItem>
+        {/* Render the pagination number */}
+        {pageDisplayNumbers(totalPages, currentPage)
+          .map((pageNumber) => {
+            return (
+              <PaginationItem key={pageNumber}>
+                <PaginationLink
+                  isActive={currentPage === pageNumber}
+                  href={onPageChange(pageNumber)}
+                >
+                  {pageNumber}
+                </PaginationLink>
+              </PaginationItem>
+            )
+          })}
+        {/* Next button, modify the default shadcnui component for disable feature */}
         <PaginationItem>
-          <PaginationLink href="#">1</PaginationLink>
-        </PaginationItem>
-        <PaginationItem>
-          <PaginationEllipsis />
-        </PaginationItem>
-        <PaginationItem>
-          <PaginationNext href="#" />
+          <PaginationNext
+            disable={currentPage === totalPages}
+            href={onPageChange(currentPage < totalPages ? currentPage + 1 : totalPages)}
+          />
         </PaginationItem>
       </PaginationContent>
     </Pagination >
