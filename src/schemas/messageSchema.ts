@@ -25,3 +25,9 @@ export const MessageItemSchema = MessageFormSchema.extend({
     }),
   time: z.date(),
 })
+
+export const SearchInputSchema = z.object({
+  keyword: z.string().regex(/^[A-Za-z0-9]+$/, {
+    message: "Keyword must contain only letters and numbers.",
+  }),
+})
