@@ -29,7 +29,7 @@ export const getMessageList = async (className: string, keyword: string) => {
 
 // Generate message list with pagination info
 // Conver to MessageItem type
-const paginateMessages = (messages: MessageDataModel[]): PaginatedData<MessageItem>[] => {
+export const paginateMessages = (messages: MessageDataModel[]): PaginatedData<MessageItem>[] => {
   return messages.map((message, index) => {
     // Generate page number as key
     const pageNumber = Math.floor(index / ITEM_PER_PAGE) + 1;

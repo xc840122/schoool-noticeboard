@@ -10,11 +10,9 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog"
 import { MessageItem } from "@/types/messageType";
-import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 
 const DialogCard = ({ defaultData }: { defaultData: MessageItem }) => {
-  const router = useRouter();
   const [error, setError] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition(); // Ensures UI remains interactive
 
@@ -25,10 +23,9 @@ const DialogCard = ({ defaultData }: { defaultData: MessageItem }) => {
     startTransition(async () => {
       try {
         await deleteMessage(defaultData.id); // Ensure deletion completes
-        router.refresh(); // Refresh the list after successful deletion
+        // router.refresh(); // Refresh the list after successful deletion
       } catch (err) {
-        setError("Failed to delete message. Please try again.");
-        console.error(err);
+        setError(`Failed to delete message. Please try again. ${err}`);
       }
     });
   };
