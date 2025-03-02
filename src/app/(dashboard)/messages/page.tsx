@@ -11,6 +11,7 @@ import { TableCell, TableRow } from "@/components/ui/table";
 import { PaginatedData } from "@/types/commonType";
 import { MessageItem } from "@/types/messageType";
 
+
 export const className = '3A';
 
 const columns = [
@@ -45,13 +46,11 @@ const renderRow = (item: MessageItem) => {
         {/* Bind FormModal to buttons*/}
         <div className="flex gap-2">
           {/* Delete button and dialog */}
-          <DialogCard
-            triggerButtonText="Delete"
-            dialogTitle="Are you absolutely sure?"
-            dialogDescription="This action cannot be undone. This will permanently delete your account and remove your data from our servers."
-            cancelText="Cancel"
-            confirmText="Delete"
-          />
+          <DialogModal triggerButtonText="Delete">
+            <DialogCard
+              defaultData={item}
+            />
+          </DialogModal>
           {/* Edit button and dialog */}
           <DialogModal
             triggerButtonText="Edit"

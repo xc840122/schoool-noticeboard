@@ -1,5 +1,5 @@
 /**
- * Message repository
+ * Message data layer
  * 
  */
 import { fetchMutation, fetchQuery } from "convex/nextjs";
@@ -8,7 +8,7 @@ import { api } from "../../convex/_generated/api";
 /**
  * Get message list by class name from database
  * Apply beta function fetchQuery from convex/nextjs for SSR
- * @param className 
+ * @param className
  * @returns 
  */
 export const getMessageListData = async (className: string) => {
@@ -68,3 +68,14 @@ export const createMessageData = async (className: string, title: string, descri
 //     throw new Error(`Failed to update message: ${error}`);
 //   }
 // }
+
+export const deleteMessageData = async (id: string) => {
+  try {
+    await fetchMutation(
+      api.message.deleteMessage,
+      { _id: id }
+    );
+  } catch (error) {
+    throw new Error(`Failed to delete message: ${error}`);
+  }
+}

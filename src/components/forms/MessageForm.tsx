@@ -45,7 +45,6 @@ const MessageForm = ({
     // Call create or update message function
     if (operationType === 'create') {
       // Call create message function
-      // console.log('Create message:', values);
       createMessage(className, values.title, values.description);
     } else {
       // Call update message function

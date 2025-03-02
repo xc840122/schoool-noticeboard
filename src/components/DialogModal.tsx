@@ -7,6 +7,7 @@ import {
 import { Button } from "./ui/button"
 import { ReactElement, useState } from "react";
 import React from "react";
+import Image from "next/image";
 
 interface ModalProps {
   triggerButtonText: string;
@@ -32,6 +33,15 @@ const DialogModal = ({
         {children && React.isValidElement(children)
           ? React.cloneElement(children, { onClose: () => setIsOpen(false) })
           : children}
+        <div className="absolute top-4 right-4 cursor-pointer">
+          <Image
+            src={'/close.png'}
+            alt="Close"
+            width={14}
+            height={14}
+            onClick={() => setIsOpen(false)}
+          />
+        </div>
       </AlertDialogContent>
     </AlertDialog>
   )
