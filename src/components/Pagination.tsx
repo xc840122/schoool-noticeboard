@@ -9,7 +9,7 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination"
 import { MAX_DISPLAY_PAGE_NUMBER } from "@/lib/settings";
-import { usePathname } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 
 
 const PaginationView = ({
@@ -22,8 +22,16 @@ const PaginationView = ({
 
   // Handle the change of the pagination
   const path = usePathname();
+  const searchParams = useSearchParams();
+
   const onPageChange = (page: number) => {
-    return `${path}?page=${page}`;
+    // Create a new URLSearchParams instance to preserve existing parameters
+    const params = new URLSearchParams(searchParams.toString());
+    console.log("params", params);
+    // Update or set the `page` parameter
+    params.set("page", page.toString());
+    // Return the new URL with the updated parameters
+    return `${path}?${params.toString()}`;
   }
 
   /**

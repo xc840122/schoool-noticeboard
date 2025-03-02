@@ -1,4 +1,4 @@
-import { getMessageListWithPagination } from "@/app/business/messageBusiness";
+import { getMessageList, getMessageListWithPage } from "@/app/business/messageBusiness";
 import DashboardHeader from "@/components/DashboardHeader"
 import { DatePickerWithRange } from "@/components/DatePickerWithRange";
 import DialogCard from "@/components/DialogCard";
@@ -8,6 +8,7 @@ import Pagination from "@/components/Pagination";
 import SearchBar from "@/components/SearchBar";
 import Table from "@/components/Table";
 import { TableCell, TableRow } from "@/components/ui/table";
+import { PaginatedData } from "@/types/commonType";
 import { MessageItem } from "@/types/messageType";
 
 const columns = [
@@ -62,15 +63,18 @@ const renderRow = (item: MessageItem) => {
 }
 
 const MessagePage = async ({ searchParams }: {
-  searchParams: { page?: string }
+  searchParams: { page?: string, search?: string }
 }) => {
   // Extract page from url, defaulting to '1' if missing
   const { page } = await searchParams;
   const pageNum = parseInt(page ?? '1');
 
+  const { search } = await searchParams;
+  const searchValue = (search ?? '').trim();
+
   // Get message map, Hardcode '3A' as className for testing only
-  const messagesWithPageInfo = await getMessageListWithPagination('3A')
-    ?? new Map<number, MessageItem[]>();
+  const messageList = await getMessageList('3A', searchValue);
+  const messagesWithPageInfo = await getMessageListWithPage(messageList as PaginatedData<MessageItem>[]);
 
   // Get message list by page number
   const messagesPerPage = messagesWithPageInfo.get(pageNum) ?? [];
