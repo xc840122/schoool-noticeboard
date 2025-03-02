@@ -89,7 +89,7 @@ const MessagePage = async ({ searchParams }: {
         <DashboardHeader />
       </div>
       {/* Function bar */}
-      <div className="flex flex-col md:flex-row md:justify-between items-center gap-4 w-full">
+      <div className="flex flex-col md:flex-row md:justify-between items-start gap-4 w-full">
         <DatePickerWithRange className="w-full md:w-auto" />
         <SearchBar />
         <DialogModal
