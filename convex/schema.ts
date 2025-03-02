@@ -8,5 +8,8 @@ export default defineSchema({
     class: v.string(),
   })
     .index("by_class", ["class"]) // Index for filtering by class
-    .index("by_title_description", ["title", "description"]) // Multi-field index for keyword search
+    .searchIndex("search_title", {
+      searchField: "title",
+      filterFields: ["class"]
+    })
 });

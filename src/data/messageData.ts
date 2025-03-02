@@ -22,3 +22,15 @@ export const getMessageListData = async (className: string) => {
     throw new Error(`Failed to get message list from db: ${error}`);
   }
 }
+
+export const searchMessageData = async (className: string, keyword: string) => {
+  try {
+    const searchResult = await fetchQuery(
+      api.message.searchMessage,
+      { className: className, keyword: keyword }
+    );
+    return searchResult;
+  } catch (error) {
+    throw new Error(`Failed to search message list from db: ${error}`);
+  }
+}
