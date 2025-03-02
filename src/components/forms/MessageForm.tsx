@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button"
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -13,30 +14,44 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { AlertDialogTitle } from "../ui/alert-dialog"
-import { MessageFormValues } from "@/types/messageType"
+import { MessageFormValues, MessageItem } from "@/types/messageType"
 import { MessageFormSchema } from "@/schemas/messageSchema"
+import { createMessage } from "@/app/business/messageBusiness"
+import { className } from "@/app/(dashboard)/messages/page"
 
 const MessageForm = ({
   operationType,
-  data
+  defaultData,
+  onClose,
 }: {
   operationType: 'create' | 'edit'
-  data?: MessageFormValues
+  defaultData?: MessageItem
+  onClose?: () => void
 }) => {
+
   // Define form.
   const form = useForm<MessageFormValues>({
     resolver: zodResolver(MessageFormSchema),
     defaultValues: {
-      title: data?.title ?? '',
-      description: data?.description ?? '',
+      title: defaultData?.title ?? '',
+      description: defaultData?.description ?? '',
     }, //Load default values for edit action
   })
 
   // Define a submit handler.
   const onSubmit = (values: MessageFormValues) => {
-    // Do something with the form values.
-    // This will be type-safe and validated.
-    console.log(values)
+    const result = MessageFormSchema.safeParse(values);
+    if (!result.success) return;
+    // Call create or update message function
+    if (operationType === 'create') {
+      // Call create message function
+      // console.log('Create message:', values);
+      createMessage(className, values.title, values.description);
+    } else {
+      // Call update message function
+      console.log('Update message:', values);
+    }
+    onClose?.();
   }
 
   return (
@@ -59,9 +74,9 @@ const MessageForm = ({
                   className='text-xs'
                   placeholder="At least 2 characters" {...field} />
               </FormControl>
-              {/* <FormDescription>
-                Title must be at least 2 characters.
-              </FormDescription> */}
+              <FormDescription>
+                Title of the message.
+              </FormDescription>
               <FormMessage />
             </FormItem>
           )}
@@ -78,9 +93,9 @@ const MessageForm = ({
                   className='text-xs'
                   placeholder="At least 10 characters." {...field} />
               </FormControl>
-              {/* <FormDescription>
-                Description must be at least 10 characters.
-              </FormDescription> */}
+              <FormDescription>
+                Description of the message.
+              </FormDescription>
               <FormMessage />
             </FormItem>
           )}

@@ -1,7 +1,7 @@
-import { getMessageListData, searchMessageData } from "@/data/messageData"
+import { createMessageData, getMessageListData, searchMessageData } from "@/data/messageData"
 import { ITEM_PER_PAGE } from "@/lib/settings";
 import { ConvertToPageMap } from "@/lib/utils";
-import { SearchInputSchema } from "@/schemas/messageSchema";
+import { MessageFormSchema, SearchInputSchema } from "@/schemas/messageSchema";
 import { PaginatedData } from "@/types/commonType";
 import { MessageItem } from "@/types/messageType";
 
@@ -31,6 +31,7 @@ export const getMessageList = async (className: string, keyword: string) => {
         return {
           page: pageNumber,
           item: {
+            id: message._id,
             title: message.title,
             description: message.description,
             class: className,
@@ -56,6 +57,23 @@ export const getMessageListWithPage = async (messageList: PaginatedData<MessageI
 
   } catch (error) {
     throw new Error(`Failed to convert message list: ${error}`);
+  }
+}
+
+// Create a new message
+export const createMessage = async (className: string, title: string, description: string) => {
+  try {
+    // Validate form input
+    const result = MessageFormSchema.safeParse({ title: title, description: description });
+    if (!result.success) {
+      throw new Error(`Invalid form input: ${result.error}`);
+    }
+    // Create new message
+    const newMessage = await createMessageData(className, title, description);
+    // console.log('New message business:', newMessage);
+    return newMessage;
+  } catch (error) {
+    throw new Error(`Failed to create message: ${error}`);
   }
 }
 

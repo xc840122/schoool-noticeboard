@@ -15,6 +15,8 @@ const SearchBar = () => {
   // Handle the search action
   const searchHandler = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();  // Prevent default form submission (page reload)
+
+    // Get the input value
     const value = (e.currentTarget.elements.namedItem('search') as HTMLInputElement).value;
 
     // Validate the input

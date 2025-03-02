@@ -11,6 +11,8 @@ import { TableCell, TableRow } from "@/components/ui/table";
 import { PaginatedData } from "@/types/commonType";
 import { MessageItem } from "@/types/messageType";
 
+export const className = '3A';
+
 const columns = [
   {
     header: 'Title',
@@ -34,11 +36,11 @@ const renderRow = (item: MessageItem) => {
   return (
     <TableRow
       className="cursor-pointer hover:bg-gray-100 p-2 rounded-md transition"
-      key={item.title}
+      key={item.id}
     >
       <TableCell className="font-medium">{item.title}</TableCell>
       <TableCell>{item.description}</TableCell>
-      <TableCell>{item.time.toString()}</TableCell>
+      <TableCell>{item.time?.toString()}</TableCell>
       <TableCell>
         {/* Bind FormModal to buttons*/}
         <div className="flex gap-2">
@@ -54,7 +56,7 @@ const renderRow = (item: MessageItem) => {
           <DialogModal
             triggerButtonText="Edit"
           >
-            <MessageForm operationType="edit" data={{ title: item.title, description: item.description }} />
+            <MessageForm operationType="edit" defaultData={item} />
           </DialogModal>
         </div>
       </TableCell>
@@ -72,8 +74,8 @@ const MessagePage = async ({ searchParams }: {
   const { search } = await searchParams;
   const searchValue = (search ?? '').trim();
 
-  // Get message map, Hardcode '3A' as className for testing only
-  const messageList = await getMessageList('3A', searchValue);
+  // Get message map
+  const messageList = await getMessageList(className, searchValue);
   const messagesWithPageInfo = await getMessageListWithPage(messageList as PaginatedData<MessageItem>[]);
 
   // Get message list by page number

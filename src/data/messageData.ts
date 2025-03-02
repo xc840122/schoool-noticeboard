@@ -2,7 +2,7 @@
  * Message repository
  * 
  */
-import { fetchQuery } from "convex/nextjs";
+import { fetchMutation, fetchQuery } from "convex/nextjs";
 import { api } from "../../convex/_generated/api";
 
 /**
@@ -34,3 +34,37 @@ export const searchMessageData = async (className: string, keyword: string) => {
     throw new Error(`Failed to search message list from db: ${error}`);
   }
 }
+
+export const createMessageData = async (className: string, title: string, description: string) => {
+  try {
+    const newMessage = await fetchMutation(
+      api.message.createMessage,
+      {
+        className: className,
+        title: title,
+        description: description
+      }
+    );
+    // console.log('New message:', newMessage);
+    return newMessage;
+  } catch (error) {
+    throw new Error(`Failed to create message: ${error}`);
+  }
+}
+
+
+// export const updateMessageData = async (id: string, title: string, description: string) => {
+//   try {
+
+//     await fetchMutation(
+//       api.message.updateMessage,
+//       {
+//         _id: id,
+//         title: title,
+//         description: description
+//       }
+//     );
+//   } catch (error) {
+//     throw new Error(`Failed to update message: ${error}`);
+//   }
+// }

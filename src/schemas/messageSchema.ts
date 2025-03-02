@@ -16,6 +16,7 @@ export const MessageFormSchema = z.object({
  * Schema for message item on list.
  */
 export const MessageItemSchema = MessageFormSchema.extend({
+  id: z.string(),
   class: z.string()
     .min(2, {
       message: "Class must be at least 2 characters.",
