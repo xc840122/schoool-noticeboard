@@ -1,3 +1,6 @@
+'use client'
+
+import { deleteMessage } from "@/app/business/messageBusiness";
 import {
   AlertDialogAction,
   AlertDialogCancel,
@@ -6,35 +9,48 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog"
-import DialogModal from "./DialogModal"
+import { MessageItem } from "@/types/messageType";
+import { useState, useTransition } from "react";
 
-const DialogCard = ({
-  triggerButtonText,
-  dialogTitle,
-  dialogDescription,
-  cancelText,
-  confirmText
-}: {
-  triggerButtonText: string,
-  dialogTitle: string,
-  dialogDescription: string
-  cancelText: string,
-  confirmText?: string
-}) => {
+const DialogCard = ({ defaultData }: { defaultData: MessageItem }) => {
+  const [error, setError] = useState<string | null>(null);
+  const [isPending, startTransition] = useTransition(); // Ensures UI remains interactive
+
+  const onConfirm = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setError(null); // Reset previous errors
+
+    startTransition(async () => {
+      try {
+        await deleteMessage(defaultData.id); // Ensure deletion completes
+        // router.refresh(); // Refresh the list after successful deletion
+      } catch (err) {
+        setError(`Failed to delete message. Please try again. ${err}`);
+      }
+    });
+  };
+
   return (
-    <DialogModal triggerButtonText={triggerButtonText}>
+    <>
       <AlertDialogHeader>
-        <AlertDialogTitle>{dialogTitle}</AlertDialogTitle>
+        <AlertDialogTitle>
+          {`Are you sure you want to delete ${defaultData.title}?`}
+        </AlertDialogTitle>
         <AlertDialogDescription>
-          {dialogDescription}
+          This action cannot be undone. This will permanently remove the message.
         </AlertDialogDescription>
       </AlertDialogHeader>
-      <AlertDialogFooter>
-        <AlertDialogCancel>{cancelText}</AlertDialogCancel>
-        <AlertDialogAction>{confirmText}</AlertDialogAction>
+      {error && <p className="text-red-500 text-sm">{error}</p>}
+      <AlertDialogFooter className="flex items-center justify-center gap-2">
+        <AlertDialogCancel disabled={isPending}>Cancel</AlertDialogCancel>
+        <form onSubmit={onConfirm}>
+          <AlertDialogAction type="submit" disabled={isPending}>
+            {isPending ? "Deleting..." : "Confirm"}
+          </AlertDialogAction>
+        </form>
       </AlertDialogFooter>
-    </DialogModal>
-  )
-}
+    </>
+  );
+};
 
-export default DialogCard
+export default DialogCard;

@@ -1,5 +1,5 @@
 // db operation of messages
-import { query } from "./_generated/server";
+import { mutation, query } from "./_generated/server";
 import { v } from "convex/values";
 
 // This function is used to get messages by class
@@ -30,4 +30,37 @@ export const searchMessage = query({
     // Different ordering of results are not supported in search queries,must handle in memory
     return messages.sort((a, b) => b._creationTime - a._creationTime);
   },
+});
+
+// Create a new message
+export const createMessage = mutation({
+  args: { className: v.string(), title: v.string(), description: v.string() },
+  handler: async (ctx, args) => {
+    const message = await ctx.db.insert("message", {
+      title: args.title,
+      description: args.description,
+      class: args.className,
+    });
+    return message;
+  },
+});
+
+// Update a message
+export const updateMessage = mutation({
+  args: { _id: v.id('message'), title: v.string(), description: v.string() },
+  handler: async (ctx, args) => {
+    const { _id } = args;
+    await ctx.db.patch(_id, {
+      title: args.title,
+      description: args.description
+    });
+  }
+});
+
+// Delete a message
+export const deleteMessage = mutation({
+  args: { _id: v.id("message") },
+  handler: async (ctx, args) => {
+    await ctx.db.delete(args._id);
+  }
 });
