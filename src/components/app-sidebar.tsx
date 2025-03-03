@@ -2,8 +2,6 @@
 
 import * as React from "react"
 import {
-  Bot,
-  Settings2,
   SquareTerminal,
 } from "lucide-react"
 
@@ -37,53 +35,11 @@ const data = {
         },
         {
           title: "Lessons",
-          url: "/lessons",
+          url: "/messages",
         },
         {
           title: "Students",
-          url: "/students",
-        },
-      ],
-    },
-    {
-      title: "Sport Management",
-      url: "#",
-      icon: Bot,
-      items: [
-        {
-          title: "Football",
-          url: "#",
-        },
-        {
-          title: "Rugby",
-          url: "#",
-        },
-        {
-          title: "Swimming",
-          url: "#",
-        },
-      ],
-    },
-    {
-      title: "Settings",
-      url: "#",
-      icon: Settings2,
-      items: [
-        {
-          title: "Teachers",
-          url: "#",
-        },
-        {
-          title: "Students",
-          url: "#",
-        },
-        {
-          title: "Admins",
-          url: "#",
-        },
-        {
-          title: "Parents",
-          url: "#",
+          url: "/messages",
         },
       ],
     },
