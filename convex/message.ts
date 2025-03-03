@@ -17,12 +17,17 @@ export const getMessageList = query({
 
 // Search messages by keyword
 export const searchMessage = query({
-  args: { className: v.string(), keyword: v.string() },
+  args: {
+    className: v.string(),
+    keyword: v.string(),
+  },
   handler: async (ctx, args) => {
     const messages = await ctx.db
       .query("message")
       .withSearchIndex("search_title", q =>
-        q.search("title", args.keyword).eq("class", args.className)
+        q
+          .search("title", args.keyword)
+          .eq("class", args.className)
       )
       .collect();
     // Sort the messages by _creationTime in descending order
@@ -62,5 +67,22 @@ export const deleteMessage = mutation({
   args: { _id: v.id("message") },
   handler: async (ctx, args) => {
     await ctx.db.delete(args._id);
+  }
+});
+
+// Query messages with date range
+export const getMessageListWithDateRange = query({
+  args: { className: v.string(), startDate: v.number(), endDate: v.number() },
+  handler: async (ctx, args) => {
+    const messages = await ctx.db
+      .query("message")
+      .withIndex("by_class", q =>
+        q.eq("class", args.className)
+          .gte("_creationTime", args.startDate)
+          .lte("_creationTime", args.endDate)
+      )
+      .order("desc")
+      .collect();
+    return messages;
   }
 });

@@ -1,4 +1,4 @@
-import { createMessageData, deleteMessageData, getMessageListData, searchMessageData } from "@/data/messageData"
+import { createMessageData, deleteMessageData, getMessageListData, searchMessageData, updateMessageData } from "@/data/messageData"
 import { ITEM_PER_PAGE } from "@/lib/settings";
 import { ConvertToPageMap } from "@/lib/utils";
 import { MessageFormSchema, SearchInputSchema } from "@/schemas/messageSchema";
@@ -23,7 +23,8 @@ export const getMessageList = async (className: string, keyword: string) => {
     }
     return paginateMessages(messages);
   } catch (error) {
-    throw new Error(`Failed to get message list with page info: ${error}`);
+    console.error(`Failed to get message list: ${error}`);
+    return [];
   }
 }
 
@@ -57,7 +58,8 @@ export const getMessageListWithPage = (messageList: PaginatedData<MessageItem>[]
     return messageMap;
 
   } catch (error) {
-    throw new Error(`Failed to convert message list: ${error}`);
+    console.error(`Failed to get message list with page: ${error}`);
+    return new Map<number, MessageItem[]>();
   }
 }
 
@@ -74,7 +76,18 @@ export const createMessage = async (className: string, title: string, descriptio
     // console.log('New message business:', newMessage);
     return newMessage;
   } catch (error) {
-    throw new Error(`Failed to create message: ${error}`);
+    console.error(`Failed to create message: ${error}`);
+    return null;
+  }
+}
+
+// Update a message
+export const updateMessage = async (id: string, title: string, description: string) => {
+  try {
+    // Update message
+    await updateMessageData(id, title, description);
+  } catch (error) {
+    console.error(`Failed to update message: ${error}`);
   }
 }
 
@@ -83,7 +96,7 @@ export const deleteMessage = async (id: string) => {
     // Delete message
     await deleteMessageData(id);
   } catch (error) {
-    throw new Error(`Failed to delete message: ${error}`);
+    console.error(`Failed to delete message: ${error}`);
   }
 }
 

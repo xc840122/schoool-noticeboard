@@ -15,7 +15,6 @@ import type {
 } from "convex/server";
 import type * as message from "../message.js";
 import type * as seed from "../seed.js";
-import type * as triggers from "../triggers.js";
 
 /**
  * A utility for referencing Convex functions in your app's API.
@@ -28,7 +27,6 @@ import type * as triggers from "../triggers.js";
 declare const fullApi: ApiFromModules<{
   message: typeof message;
   seed: typeof seed;
-  triggers: typeof triggers;
 }>;
 export declare const api: FilterApi<
   typeof fullApi,

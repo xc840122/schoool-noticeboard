@@ -2,8 +2,6 @@
 
 import * as React from "react"
 import {
-  Bot,
-  Settings2,
   SquareTerminal,
 } from "lucide-react"
 
@@ -16,6 +14,7 @@ import {
   SidebarHeader,
   SidebarRail,
 } from "@/components/ui/sidebar"
+import { useUser } from "@clerk/nextjs"
 
 // This is sample data.
 const data = {
@@ -37,53 +36,11 @@ const data = {
         },
         {
           title: "Lessons",
-          url: "/lessons",
+          url: "/messages",
         },
         {
           title: "Students",
-          url: "/students",
-        },
-      ],
-    },
-    {
-      title: "Sport Management",
-      url: "#",
-      icon: Bot,
-      items: [
-        {
-          title: "Football",
-          url: "#",
-        },
-        {
-          title: "Rugby",
-          url: "#",
-        },
-        {
-          title: "Swimming",
-          url: "#",
-        },
-      ],
-    },
-    {
-      title: "Settings",
-      url: "#",
-      icon: Settings2,
-      items: [
-        {
-          title: "Teachers",
-          url: "#",
-        },
-        {
-          title: "Students",
-          url: "#",
-        },
-        {
-          title: "Admins",
-          url: "#",
-        },
-        {
-          title: "Parents",
-          url: "#",
+          url: "/messages",
         },
       ],
     },
@@ -91,6 +48,7 @@ const data = {
 }
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const { user } = useUser();
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
@@ -99,7 +57,11 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <NavMain items={data.navMain} />
       </SidebarContent>
       <SidebarFooter>
-        <NavUser user={data.user} />
+        <NavUser user={{
+          name: user?.username ?? '',
+          email: user?.primaryEmailAddress?.emailAddress ?? '',
+          avatar: user?.imageUrl ?? '',
+        }} />
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>

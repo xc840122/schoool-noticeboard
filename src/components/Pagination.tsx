@@ -27,7 +27,6 @@ const PaginationView = ({
   const onPageChange = (page: number) => {
     // Create a new URLSearchParams instance to preserve existing parameters
     const params = new URLSearchParams(searchParams.toString());
-    console.log("params", params);
     // Update or set the `page` parameter
     params.set("page", page.toString());
     // Return the new URL with the updated parameters
@@ -64,7 +63,7 @@ const PaginationView = ({
         {/* Previous button, modify the default shadcnui component for disable feature */}
         <PaginationItem>
           <PaginationPrevious
-            disable={currentPage === 1}
+            disable={currentPage === 1 || totalPages === 0}
             href={onPageChange(currentPage > 1 ? currentPage - 1 : 1)}
           />
         </PaginationItem>
@@ -85,7 +84,7 @@ const PaginationView = ({
         {/* Next button, modify the default shadcnui component for disable feature */}
         <PaginationItem>
           <PaginationNext
-            disable={currentPage === totalPages}
+            disable={currentPage === totalPages || totalPages === 0}
             href={onPageChange(currentPage < totalPages ? currentPage + 1 : totalPages)}
           />
         </PaginationItem>
