@@ -1,6 +1,6 @@
 'use client'
 
-import { deleteMessage } from "@/app/business/messageBusiness";
+import { deleteMessage } from "@/business/messageBusiness";
 import {
   AlertDialogAction,
   AlertDialogCancel,

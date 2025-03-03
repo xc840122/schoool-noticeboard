@@ -14,6 +14,7 @@ import {
   SidebarHeader,
   SidebarRail,
 } from "@/components/ui/sidebar"
+import { useUser } from "@clerk/nextjs"
 
 // This is sample data.
 const data = {
@@ -47,6 +48,7 @@ const data = {
 }
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const { isSignedIn, user, isLoaded } = useUser();
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
@@ -55,7 +57,11 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <NavMain items={data.navMain} />
       </SidebarContent>
       <SidebarFooter>
-        <NavUser user={data.user} />
+        <NavUser user={{
+          name: user?.username ?? '',
+          email: user?.primaryEmailAddress?.emailAddress ?? '',
+          avatar: user?.imageUrl ?? '',
+        }} />
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>

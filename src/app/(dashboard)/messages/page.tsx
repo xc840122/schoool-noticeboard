@@ -1,6 +1,6 @@
 'use client';
 
-import { getMessageListWithPage, paginateMessages } from "@/app/business/messageBusiness";
+import { getMessageListWithPage, paginateMessages } from "@/business/messageBusiness";
 import DashboardHeader from "@/components/DashboardHeader"
 import { DatePickerWithRange } from "@/components/DatePickerWithRange";
 import DialogCard from "@/components/DialogCard";
@@ -11,10 +11,7 @@ import SearchBar from "@/components/SearchBar";
 import Table from "@/components/Table";
 import { TableCell, TableRow } from "@/components/ui/table";
 import { MessageItem } from "@/types/messageType";
-import { useQuery } from "convex/react";
-import { useSearchParams } from "next/navigation";
-import { api } from "../../../../convex/_generated/api";
-import { convertDateToCreationTime } from "@/lib/utils";
+import { useMessageData } from "@/hooks/useMessageData";
 
 
 export const className = '3A';
@@ -37,6 +34,48 @@ const columns = [
     accessor: 'action',
   }
 ];
+
+const MessagePage = () => {
+
+  // Get message data from useMessageData hook
+  const { messages, pageNum, totalPages } = useMessageData();
+
+  if (messages === undefined) {
+    return [];
+  }
+
+  // Generate message list with pagination info
+  const messagesWithPageInfo = getMessageListWithPage(paginateMessages(messages ?? []));
+  // Get message list by page number
+  const messagesPerPage = messagesWithPageInfo.get(pageNum) ?? [];
+
+  return (
+    <div className="flex flex-col container mx-auto max-w-5xl items-center gap-4 p-2">
+      {/* Top, breadcrumbs */}
+      <div className="w-full">
+        <DashboardHeader />
+      </div>
+      {/* Function bar */}
+      <div className="flex flex-col md:flex-row md:justify-between items-start gap-4 w-full">
+        <DatePickerWithRange className="w-full md:w-auto" />
+        <SearchBar />
+        <DialogModal
+          triggerButtonText="New Message"
+          triggerButtonStyles="w-full md:w-auto"
+        >
+          <MessageForm operationType="create" />
+        </DialogModal>
+      </div>
+      {/* Table content */}
+      <div className="w-full bg-gray-50 p-4 rounded-lg">
+        <Table columns={columns} renderRow={renderRow} data={messagesPerPage} />
+        <Pagination currentPage={pageNum} totalPages={totalPages} />
+      </div>
+    </div>
+  )
+}
+
+export default MessagePage
 
 const renderRow = (item: MessageItem) => {
   return (
@@ -68,97 +107,9 @@ const renderRow = (item: MessageItem) => {
   )
 }
 
-const MessagePage = () => {
-  // Extract page from url, defaulting to '1' if missing
-  const searchParams = useSearchParams();
-  // Get page number, search value, start and end date from url
-  const pageNum = parseInt(searchParams.get('page') ?? '1');
-  // Get search value from url
-  const searchValue = searchParams.has('search')
-    ? (searchParams.get('search') ?? '').trim().toLowerCase()
-    : '';
-  // Get start and end date from url
-  const startDate = searchParams.has('start')
-    ? searchParams.get('start') ?? ''
-    : '';
-  const endDate = searchParams.has('end')
-    ? searchParams.get('end') ?? ''
-    : '';
-
-  // Get message list
-  const messageList = useQuery(
-    api.message.getMessageList,
-    { className: className }
-  );
-
-  // Get search result if search value is not empty
-  const searchResult = useQuery(
-    api.message.searchMessage,
-    { className: className, keyword: searchValue }
-  );
-
-  // Get date range result if start and end date are not empty
-  const dateRangeResult = useQuery(
-    api.message.getMessageListWithDateRange,
-    {
-      className: className,
-      startDate: convertDateToCreationTime(startDate),
-      endDate: convertDateToCreationTime(endDate)
-    }
-  );
-
-  // Get message list according to search params
-  const messages = searchValue !== ''
-    ? searchResult
-    : (startDate !== '' && endDate !== '')
-      ? dateRangeResult
-      : messageList;
-
-  if (messages === undefined) {
-    return [];
-  }
-
-  // Generate message list with pagination info
-  const messagesWithPageInfo = getMessageListWithPage(paginateMessages(messages ?? []));
-
-  // Get total pages
-  const totalPages = messagesWithPageInfo.size;
-
-  // Get message list by page number
-  const messagesPerPage = messagesWithPageInfo.get(pageNum) ?? [];
-
-
-  return (
-    <div className="flex flex-col container mx-auto max-w-5xl items-center gap-4 p-2">
-      {/* Top, breadcrumbs */}
-      <div className="w-full">
-        <DashboardHeader />
-      </div>
-      {/* Function bar */}
-      <div className="flex flex-col md:flex-row md:justify-between items-start gap-4 w-full">
-        <DatePickerWithRange className="w-full md:w-auto" />
-        <SearchBar />
-        <DialogModal
-          triggerButtonText="New Message"
-          triggerButtonStyles="w-full md:w-auto"
-        >
-          <MessageForm operationType="create" />
-        </DialogModal>
-      </div>
-      {/* Table content */}
-      <div className="w-full bg-gray-50 p-4 rounded-lg">
-        <Table columns={columns} renderRow={renderRow} data={messagesPerPage} />
-        <Pagination currentPage={pageNum} totalPages={totalPages} />
-      </div>
-    </div>
-  )
-}
-
-export default MessagePage
-
 
 /**
- * This is the SSR page which is not apply convex features to update data
+ * This is the SSR page which is not apply convex subscription features to update data
  * It uses feathQuery to fetch data and display it(Beta SSR feature of Convex,without data subscription)
  * It applies traditional way by router.refresh() to update data
  */

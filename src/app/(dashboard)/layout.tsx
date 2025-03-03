@@ -8,7 +8,7 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }) {
   return (
-    <SidebarProvider>
+    <SidebarProvider >
       <div className="flex w-screen">
         <AppSidebar />
         <SidebarInset className="flex flex-col flex-1">

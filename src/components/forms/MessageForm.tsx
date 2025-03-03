@@ -16,7 +16,7 @@ import { Input } from "@/components/ui/input"
 import { AlertDialogTitle } from "../ui/alert-dialog"
 import { MessageFormValues, MessageItem } from "@/types/messageType"
 import { MessageFormSchema } from "@/schemas/messageSchema"
-import { createMessage, updateMessage } from "@/app/business/messageBusiness"
+import { createMessage, updateMessage } from "@/business/messageBusiness"
 import { className } from "@/app/(dashboard)/messages/page"
 
 const MessageForm = ({
