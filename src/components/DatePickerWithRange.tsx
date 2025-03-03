@@ -6,7 +6,7 @@ import { format, subDays, isBefore, isSameDay } from "date-fns";
 import { CalendarIcon } from "lucide-react";
 import { DateRange, SelectSingleEventHandler } from "react-day-picker";
 
-import { clearSearchParams, cn } from "@/lib/utils";
+import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import {
@@ -24,11 +24,12 @@ export function DatePickerWithRange({ className }: React.HTMLAttributes<HTMLDivE
   const today = new Date();
   const lastWeek = subDays(today, 7);
 
-  // Get date range from URL search params,or use last week and today
+  // Get date range from URL search params, or use last week and today
   const [date, setDate] = React.useState<DateRange | undefined>({
-    from: searchParams.get("from") ? new Date(Number(searchParams.get("from"))) : lastWeek,
-    to: searchParams.get("to") ? new Date(Number(searchParams.get("to"))) : today,
+    from: searchParams.get("start") ? new Date(searchParams.get("start") ?? '') : today,
+    to: searchParams.get("end") ? new Date(searchParams.get("end") ?? '') : lastWeek,
   });
+
 
   // Use tempDate to store the selected date range
   const [tempDate, setTempDate] = React.useState<DateRange | undefined>(date);
@@ -63,22 +64,27 @@ export function DatePickerWithRange({ className }: React.HTMLAttributes<HTMLDivE
   };
 
   // Confirm the selected date range "?start=from&end=to"
-  const handleConfirm = () => {
+  const handleConfirm = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault(); // Prevent default form submission (page reload)
+
     if (tempDate?.from && tempDate?.to) {
-      const params = new URLSearchParams(searchParams);
-      // Clear existing search params (like "search" and "page")
-      clearSearchParams(params);
+      const params = new URLSearchParams();
+
       // Convert date to URL search params format
       const from = dateParamsValue(tempDate.from);
       const to = dateParamsValue(tempDate.to);
-      // Set new date range
-      params.set("start", from.toString());
-      params.set("end", to.toString());
-      params.set("page", "1");
+
+      // Set new date range parameters (use "start" and "end" instead of "from" and "to" for the search params)
+      params.set("start", from);
+      params.set("end", to);
+      params.set("page", "1"); // Reset page to 1 after the search
+
       // Update the URL with date range query and reset page
-      router.push(`${path}?${params.toString()}`);
-      // Update date state
+      router.push(`${path}?${params.toString()}`, undefined);
+
+      // Update date state to reflect the selected range
       setDate(tempDate);
+
       // Close the popover
       setOpen(false);
     }
@@ -140,7 +146,7 @@ export function DatePickerWithRange({ className }: React.HTMLAttributes<HTMLDivE
             <Button variant="destructive" onClick={handleCancel}>
               Cancel
             </Button>
-            <Button variant="default" onClick={handleConfirm} disabled={!tempDate?.from || !tempDate?.to}>
+            <Button variant="default" onClick={(handleConfirm)} disabled={!tempDate?.from || !tempDate?.to}>
               Confirm
             </Button>
           </div>

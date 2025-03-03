@@ -1,25 +1,21 @@
 'use client'
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { clearSearchParams } from "@/lib/utils";
 import { SearchInputSchema } from "@/schemas/messageSchema";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 
 const SearchBar = () => {
 
   const router = useRouter();
   const path = usePathname();
-  const searchParams = useSearchParams();
   const [error, setError] = useState<string | null>(null);
 
   // Handle the search action
   const searchHandler = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();  // Prevent default form submission (page reload)
-
+    e.preventDefault() // Prevent default form submission (page reload)
     // Get the input value
     const value = (e.currentTarget.elements.namedItem('search') as HTMLInputElement).value;
-
     // Validate the input
     const result = SearchInputSchema.safeParse({ keyword: value });
     if (!result.success) {
@@ -27,15 +23,16 @@ const SearchBar = () => {
       return;
     }
     // Create a new URLSearchParams instance to preserve existing parameters
-    const params = new URLSearchParams(searchParams);
-    // Clear existing search params (like "search" and "page")
-    clearSearchParams(params);
+    const params = new URLSearchParams();
+
     if (value) {
       params.set("search", value.toString());
       // Reset page number 1 after triggering search
       params.set("page", "1");
       // Update the URL with search query and reset page
       router.push(`${path}?${params.toString()}`);
+      // Clear the input field after search
+      (e.currentTarget.elements.namedItem('search') as HTMLInputElement).value = '';
       setError(null);  // Clear any previous errors on successful search
     }
   };
