@@ -63,7 +63,7 @@ const PaginationView = ({
         {/* Previous button, modify the default shadcnui component for disable feature */}
         <PaginationItem>
           <PaginationPrevious
-            disable={currentPage === 1}
+            disable={currentPage === 1 || totalPages === 0}
             href={onPageChange(currentPage > 1 ? currentPage - 1 : 1)}
           />
         </PaginationItem>
@@ -84,7 +84,7 @@ const PaginationView = ({
         {/* Next button, modify the default shadcnui component for disable feature */}
         <PaginationItem>
           <PaginationNext
-            disable={currentPage === totalPages}
+            disable={currentPage === totalPages || totalPages === 0}
             href={onPageChange(currentPage < totalPages ? currentPage + 1 : totalPages)}
           />
         </PaginationItem>
