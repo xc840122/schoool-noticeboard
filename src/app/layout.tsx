@@ -3,7 +3,6 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ConvexClientProvider } from "./ConvexClientProvider";
 import { ClerkProvider } from "@clerk/nextjs";
-import { shadesOfPurple } from '@clerk/themes'
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -27,7 +26,7 @@ export default function RootLayout({
 }>) {
   return (
     <ClerkProvider appearance={{
-      baseTheme: shadesOfPurple,
+      // baseTheme: neobrutalism,
       // signIn: { baseTheme: shadesOfPurple },
       // signUp: { baseTheme: shadesOfPurple },
     }}>
