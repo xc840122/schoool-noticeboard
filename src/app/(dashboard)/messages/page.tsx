@@ -14,6 +14,7 @@ import { MessageItem } from "@/types/messageType";
 import { useQuery } from "convex/react";
 import { useSearchParams } from "next/navigation";
 import { api } from "../../../../convex/_generated/api";
+import { convertDateToCreationTime } from "@/lib/utils";
 
 
 export const className = '3A';
@@ -70,8 +71,19 @@ const renderRow = (item: MessageItem) => {
 const MessagePage = () => {
   // Extract page from url, defaulting to '1' if missing
   const searchParams = useSearchParams();
+  // Get page number, search value, start and end date from url
   const pageNum = parseInt(searchParams.get('page') ?? '1');
-  const searchValue = (searchParams.get('search') ?? '').trim();
+  // Get search value from url
+  const searchValue = searchParams.has('search')
+    ? (searchParams.get('search') ?? '').trim().toLowerCase()
+    : '';
+  // Get start and end date from url
+  const startDate = searchParams.has('start')
+    ? searchParams.get('start') ?? ''
+    : '';
+  const endDate = searchParams.has('end')
+    ? searchParams.get('end') ?? ''
+    : '';
 
   // Get message list
   const messageList = useQuery(
@@ -85,10 +97,22 @@ const MessagePage = () => {
     { className: className, keyword: searchValue }
   );
 
-  // Get message list according to search value
+  // Get date range result if start and end date are not empty
+  const dateRangeResult = useQuery(
+    api.message.getMessageListWithDateRange,
+    {
+      className: className,
+      startDate: convertDateToCreationTime(startDate),
+      endDate: convertDateToCreationTime(endDate)
+    }
+  );
+
+  // Get message list according to search params
   const messages = searchValue !== ''
     ? searchResult
-    : messageList;
+    : (startDate !== '' && endDate !== '')
+      ? dateRangeResult
+      : messageList;
 
   if (messages === undefined) {
     return [];

@@ -19,7 +19,8 @@ export const getMessageListData = async (className: string) => {
     );
     return messageList;
   } catch (error) {
-    throw new Error(`Failed to get message list from db: ${error}`);
+    console.error(`Failed to get message list from db: ${error}`);
+    return [];
   }
 }
 
@@ -31,7 +32,8 @@ export const searchMessageData = async (className: string, keyword: string) => {
     );
     return searchResult;
   } catch (error) {
-    throw new Error(`Failed to search message list from db: ${error}`);
+    console.error(`Failed to search message: ${error}`);
+    return [];
   }
 }
 
@@ -48,26 +50,26 @@ export const createMessageData = async (className: string, title: string, descri
     // console.log('New message:', newMessage);
     return newMessage;
   } catch (error) {
-    throw new Error(`Failed to create message: ${error}`);
+    console.error(`Failed to create message: ${error}`);
+    return null;
   }
 }
 
+export const updateMessageData = async (id: string, title: string, description: string) => {
+  try {
 
-// export const updateMessageData = async (id: string, title: string, description: string) => {
-//   try {
-
-//     await fetchMutation(
-//       api.message.updateMessage,
-//       {
-//         _id: id,
-//         title: title,
-//         description: description
-//       }
-//     );
-//   } catch (error) {
-//     throw new Error(`Failed to update message: ${error}`);
-//   }
-// }
+    await fetchMutation(
+      api.message.updateMessage,
+      {
+        _id: id,
+        title: title,
+        description: description
+      }
+    );
+  } catch (error) {
+    console.error(`Failed to update message: ${error}`);
+  }
+}
 
 export const deleteMessageData = async (id: string) => {
   try {
@@ -76,6 +78,7 @@ export const deleteMessageData = async (id: string) => {
       { _id: id }
     );
   } catch (error) {
-    throw new Error(`Failed to delete message: ${error}`);
+    console.error(`Failed to delete message: ${error}`);
   }
 }
+

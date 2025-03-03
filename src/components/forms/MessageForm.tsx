@@ -16,7 +16,7 @@ import { Input } from "@/components/ui/input"
 import { AlertDialogTitle } from "../ui/alert-dialog"
 import { MessageFormValues, MessageItem } from "@/types/messageType"
 import { MessageFormSchema } from "@/schemas/messageSchema"
-import { createMessage } from "@/app/business/messageBusiness"
+import { createMessage, updateMessage } from "@/app/business/messageBusiness"
 import { className } from "@/app/(dashboard)/messages/page"
 
 const MessageForm = ({
@@ -43,12 +43,17 @@ const MessageForm = ({
     const result = MessageFormSchema.safeParse(values);
     if (!result.success) return;
     // Call create or update message function
-    if (operationType === 'create') {
-      // Call create message function
-      createMessage(className, values.title, values.description);
-    } else {
-      // Call update message function
-      console.log('Update message:', values);
+    switch (operationType) {
+      case 'create':
+        createMessage(className, values.title, values.description);
+        break;
+      case 'edit':
+        if (defaultData?.id) {
+          updateMessage(defaultData.id, values.title, values.description);
+        } else {
+          console.error('No default data(id) to update message');
+        }
+        break;
     }
     onClose?.();
   }

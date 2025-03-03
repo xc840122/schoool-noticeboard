@@ -22,3 +22,16 @@ export const ConvertToPageMap = (arr: PaginatedData<MessageItem>[]) => {
   }
   return messagesPerPage;
 }
+
+// Clear search params
+export const clearSearchParams = (searchParams: URLSearchParams) => {
+  searchParams.forEach((value, key) => {
+    searchParams.delete(key);
+  });
+}
+
+// Convert date string to _creationTime (Convex format)
+export const convertDateToCreationTime = (dateString: string): number => {
+  const date = new Date(dateString);
+  return date.getTime();
+}

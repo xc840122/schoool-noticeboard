@@ -27,7 +27,6 @@ const PaginationView = ({
   const onPageChange = (page: number) => {
     // Create a new URLSearchParams instance to preserve existing parameters
     const params = new URLSearchParams(searchParams.toString());
-    console.log("params", params);
     // Update or set the `page` parameter
     params.set("page", page.toString());
     // Return the new URL with the updated parameters
