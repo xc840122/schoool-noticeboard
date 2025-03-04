@@ -25,7 +25,6 @@ export default function SignUpForm() {
     setServerError(null);
 
     if (!isLoaded) {
-      // Optionally, you could show a loading state here
       setServerError("The sign-up service is loading. Please try again later.");
       return;
     }
@@ -37,23 +36,25 @@ export default function SignUpForm() {
     }
 
     // Validate classroom code and ID before submitting
-    const validationResponse = await signUpVerificationService(data.classroom, data.verificationCode);
-    if (!validationResponse) {
+    const validationResponse = await signUpVerificationService(data.verificationCode, data.classroom);
+
+    if (!validationResponse || !validationResponse.data?.role) {
       setError("classroom", { type: "manual", message: "Invalid classroom code or verification code" });
       return;
     }
 
     try {
+      // Proceed with sign-up once the role is properly set
       await signUp.create({
         username: data.username,
         password: data.password,
         unsafeMetadata: {
-          role: validationResponse.data?.role,
+          role: validationResponse.data.role, // Ensure role is sent in metadata
           classroom: data.classroom,
         },
       });
 
-      // Redirect or handle post-signup logic
+      // Redirect after successful sign-up
       router.push('/'); // Change as needed
     } catch (error) {
       if (error instanceof Error) {
