@@ -1,6 +1,4 @@
 'use client'
-
-import { deleteMessage } from "@/business/messageBusiness";
 import {
   AlertDialogAction,
   AlertDialogCancel,
@@ -9,10 +7,11 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog"
-import { MessageItem } from "@/types/messageType";
+import { deleteNotice } from "@/services/notice-service";
+import { NoticeDataModel } from "@/types/convex-type";
 import { useState, useTransition } from "react";
 
-const DialogCard = ({ defaultData }: { defaultData: MessageItem }) => {
+const DialogCard = ({ defaultData }: { defaultData: NoticeDataModel }) => {
   const [error, setError] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition(); // Ensures UI remains interactive
 
@@ -22,10 +21,10 @@ const DialogCard = ({ defaultData }: { defaultData: MessageItem }) => {
 
     startTransition(async () => {
       try {
-        await deleteMessage(defaultData.id); // Ensure deletion completes
+        await deleteNotice(defaultData._id); // Ensure deletion completes
         // router.refresh(); // Refresh the list after successful deletion
       } catch (err) {
-        setError(`Failed to delete message. Please try again. ${err}`);
+        setError(`Failed to delete notice. Please try again. ${err}`);
       }
     });
   };
@@ -37,7 +36,7 @@ const DialogCard = ({ defaultData }: { defaultData: MessageItem }) => {
           {`Are you sure you want to delete ${defaultData.title}?`}
         </AlertDialogTitle>
         <AlertDialogDescription>
-          This action cannot be undone. This will permanently remove the message.
+          This action cannot be undone. This will permanently remove the notice.
         </AlertDialogDescription>
       </AlertDialogHeader>
       {error && <p className="text-red-500 text-sm">{error}</p>}
