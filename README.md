@@ -1,36 +1,36 @@
-my-nextjs-app/
-├── .github/
-│ └── workflows/ # GitHub Actions for CI/CD
-├── .husky/ # Git hooks (optional)
-├── .vscode/ # VSCode settings (optional)
-├── public/ # Static assets
-├── src/
-│ ├── app/ # App router (Next.js 13+)
-│ │ ├── (auth)/ # Auth-related routes
-│ │ ├── (dashboard)/ # Protected routes
-│ │ │ ├── teacher/ # Teacher-specific routes
-│ │ │ └── student/ # Student-specific routes
-│ │ ├── api/ # API routes
-│ │ ├── layout.tsx # Root layout
-│ │ └── page.tsx # Home page
-│ ├── components/ # Reusable UI components
-│ │ ├── ui/ # ShadCN UI components
-│ │ └── auth/ # Auth-related components
-│ ├── hooks/ # Custom React hooks
-│ ├── lib/ # Utility functions
-│ ├── data/ # Data layer (Convex queries/mutations)
-│ ├── business/ # Business logic layer
-│ ├── schemas/ # Zod validation schemas
-│ ├── styles/ # Global styles
-│ └── types/ # TypeScript types
-├── .env.local # Environment variables
-├── .eslintrc.js # ESLint config
-├── .prettierrc.js # Prettier config
-├── next.config.js # Next.js config
-├── tsconfig.json # TypeScript config
-├── convex.json # Convex config
-├── package.json # Project dependencies
-└── README.md # Project documentation
+/app
+/api
+/user
+route.ts # API route (calls service layer)
+/dashboard # (Client components)
+layout.tsx
+page.tsx
+
+/components # Reusable UI components
+/hooks # Custom React hooks (e.g., useAuth.ts)
+
+/lib
+prisma.ts # Prisma DB connection
+validation.ts # Zod validation schemas
+
+/services
+user-service.ts # Business logic for users
+auth-service.ts # Authentication logic
+
+/data
+user-repository.ts # Database queries for users
+task-repository.ts # Database queries for tasks
+
+/utils
+helpers.ts # General helper functions
+constants.ts # Shared constants
+
+/types
+user.ts # TypeScript interfaces
+task.ts # TypeScript interfaces
+
+/public # Static assets
+/styles # Global styles
 
 Create A Project in next.js using these technologies:
 

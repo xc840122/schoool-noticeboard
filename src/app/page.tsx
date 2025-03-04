@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
-
+// Temperary redirect to /messages for
 const Home = () => {
-  redirect("/messages");
+  redirect("/notice");
 };
 export default Home;

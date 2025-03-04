@@ -31,16 +31,16 @@ const data = {
       isActive: true,
       items: [
         {
-          title: "Messages",
-          url: "/messages",
+          title: "Notice",
+          url: "/notice",
         },
         {
-          title: "Lessons",
-          url: "/messages",
+          title: "Lesson",
+          url: "/notice",
         },
         {
-          title: "Students",
-          url: "/messages",
+          title: "Student",
+          url: "/notice",
         },
       ],
     },

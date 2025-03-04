@@ -14,24 +14,24 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { AlertDialogTitle } from "../ui/alert-dialog"
-import { MessageFormValues, MessageItem } from "@/types/messageType"
-import { MessageFormSchema } from "@/schemas/messageSchema"
-import { createMessage, updateMessage } from "@/business/messageBusiness"
-import { className } from "@/app/(dashboard)/messages/page"
+import { className } from "@/app/(dashboard)/notice/page"
+import { NoticeDataModel } from "@/types/convex-type"
+import { NoticeCreationType, NoticeCreationValidator } from "@/validators/notice-validator"
+import { createNotice, updateNotice } from "@/services/notice-service"
 
-const MessageForm = ({
+const NoticeForm = ({
   operationType,
   defaultData,
   onClose,
 }: {
   operationType: 'create' | 'edit'
-  defaultData?: MessageItem
+  defaultData?: NoticeDataModel
   onClose?: () => void
 }) => {
 
   // Define form.
-  const form = useForm<MessageFormValues>({
-    resolver: zodResolver(MessageFormSchema),
+  const form = useForm<NoticeCreationType>({
+    resolver: zodResolver(NoticeCreationValidator),
     defaultValues: {
       title: defaultData?.title ?? '',
       description: defaultData?.description ?? '',
@@ -39,17 +39,17 @@ const MessageForm = ({
   })
 
   // Define a submit handler.
-  const onSubmit = (values: MessageFormValues) => {
-    const result = MessageFormSchema.safeParse(values);
+  const onSubmit = (values: NoticeCreationType) => {
+    const result = NoticeCreationValidator.safeParse(values);
     if (!result.success) return;
     // Call create or update message function
     switch (operationType) {
       case 'create':
-        createMessage(className, values.title, values.description);
+        createNotice(className, values.title, values.description);
         break;
       case 'edit':
-        if (defaultData?.id) {
-          updateMessage(defaultData.id, values.title, values.description);
+        if (defaultData?._id) {
+          updateNotice(defaultData._id, values.title, values.description);
         } else {
           console.error('No default data(id) to update message');
         }
@@ -62,7 +62,7 @@ const MessageForm = ({
     <Form {...form}>
       {/* Form title, apply AlertDialogTitle to avoid warning of screen reader */}
       <AlertDialogTitle>
-        {operationType === 'create' ? 'Create Message' : 'Edit Message'}
+        {operationType === 'create' ? 'Create Notice' : 'Edit Notice'}
       </AlertDialogTitle>
       {/* Fields */}
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
@@ -109,4 +109,4 @@ const MessageForm = ({
     </Form>
   )
 }
-export default MessageForm;
+export default NoticeForm;
