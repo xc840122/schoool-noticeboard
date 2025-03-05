@@ -6,6 +6,8 @@ import { useMetadata } from "@/hooks/use-metadata";
 import { useURLParams } from "@/hooks/use-params";
 import NoticePageContent from "./notice-page";
 import { api } from "../../../../convex/_generated/api";
+import { Suspense } from "react";
+import Loading from "@/components/Loading";
 
 const NoticePage = () => {
   // Get search value, start date, end date, page number from URL
@@ -22,7 +24,13 @@ const NoticePage = () => {
       endDate: DateToConvexTime(endDate)
     }
   );
-  return <NoticePageContent pageNum={pageNum} status={status} role={role} notices={notices} />
+
+  return (
+    <Suspense fallback={<Loading />}>
+      <NoticePageContent pageNum={pageNum} status={status} role={role} notices={notices} />
+    </Suspense>
+  )
+
 }
 
 export default NoticePage

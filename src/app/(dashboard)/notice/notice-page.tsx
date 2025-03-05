@@ -26,7 +26,7 @@ export const NoticePageContent = ({
 }) => {
 
   // Handle the Loading, unAuthenticated
-  if (status === 'loading' || !notices) return <Loading />;
+  if (!notices) return <Loading />;
   if (status === 'unAuthenticated') return <UnAuthenticated />;
 
   // Get total pages

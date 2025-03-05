@@ -1,3 +1,4 @@
+import { SearchInputValidator } from "@/validators/notice-validator";
 import { Id } from "../_generated/dataModel";
 import { MutationCtx, QueryCtx } from "../_generated/server";
 
@@ -20,11 +21,17 @@ export const getNoticesModel = async (
 
   try {
     if (keyword) {
+      // Validate keyword
+      const result = SearchInputValidator.safeParse({ keyword: keyword });
+      const validKeyword = result.success ? result.data.keyword : null;
+      if (!validKeyword) {
+        throw new Error(`Invalid keyword: ${keyword}`);
+      }
       const notices = await ctx.db
         .query("notices")
         .withSearchIndex("search_title", q =>
           q
-            .search("title", keyword)
+            .search("title", validKeyword)
             .eq("class", classroom)
         )
         .collect();
