@@ -15,6 +15,7 @@ import type {
 } from "convex/server";
 import type * as auth from "../auth.js";
 import type * as models_auth_model from "../models/auth_model.js";
+import type * as models_notice_model from "../models/notice_model.js";
 import type * as notice from "../notice.js";
 import type * as seed from "../seed.js";
 
@@ -29,6 +30,7 @@ import type * as seed from "../seed.js";
 declare const fullApi: ApiFromModules<{
   auth: typeof auth;
   "models/auth_model": typeof models_auth_model;
+  "models/notice_model": typeof models_notice_model;
   notice: typeof notice;
   seed: typeof seed;
 }>;

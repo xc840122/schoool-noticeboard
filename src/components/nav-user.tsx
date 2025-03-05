@@ -28,7 +28,7 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar"
 import { useRouter } from "next/navigation"
-import { SignOutButton, useClerk } from "@clerk/nextjs"
+import { useClerk } from "@clerk/nextjs"
 
 export function NavUser({
   user,

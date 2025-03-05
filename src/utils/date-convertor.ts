@@ -12,3 +12,12 @@ export const ConvexTimeToDisplayFormat = (creationTime: number) => {
     day: '2-digit',
   });
 }
+
+/**
+ * Convert Search Params date string to convex Time
+ * @param date date string(yyyy-mm-dd)
+ * @returns 
+ */
+export const DateToConvexTime = (date: string) => {
+  return new Date(date).getTime();
+}
