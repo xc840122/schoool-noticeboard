@@ -1,10 +1,14 @@
 import { z } from "zod";
 
-// Verify the Signup
-export const SignUpValidator = z.object({
-  username: z.string().min(3, 'Username must be at least 3 characters').max(16, 'Username must be at most 16 characters'),
-  password: z.string().min(8, 'Password must be at least 8 characters'),
-  confirmPassword: z.string(),
+// Common username and password rules
+const usernameSchema = z.string().min(3, 'Username must be at least 3 characters').max(16, 'Username must be at most 16 characters');
+const passwordSchema = z.string().min(8, 'Password must be at least 8 characters');
+
+// Sign up schema
+export const signUpSchema = z.object({
+  username: usernameSchema,
+  password: passwordSchema,
+  confirmPassword: passwordSchema,
   classroom: z.string()
     .max(4, 'Classroom code must be at most 4 characters')
     .regex(/^[a-zA-Z0-9]+$/, 'Classroom code must contain only letters and numbers'),
@@ -14,4 +18,13 @@ export const SignUpValidator = z.object({
   path: ["confirmPassword"],
 });
 
-export type SignUpType = z.infer<typeof SignUpValidator>;
+// Sign in schema
+export const signInSchema = z.object({
+  identifier: usernameSchema,
+  password: passwordSchema,
+});
+
+export type SignUpType = z.infer<typeof signUpSchema>;
+
+export type SignInType = z.infer<typeof signInSchema>;
+

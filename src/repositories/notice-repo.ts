@@ -2,7 +2,7 @@
  * Notice data layer
  * 
  */
-import { fetchMutation, fetchQuery } from "convex/nextjs";
+import { fetchMutation } from "convex/nextjs";
 import { api } from "../../convex/_generated/api";
 import { Id } from "../../convex/_generated/dataModel";
 
@@ -10,41 +10,29 @@ import { Id } from "../../convex/_generated/dataModel";
 /**
  * Get notice list by class name from database
  * Apply beta function fetchQuery from convex/nextjs for SSR
- * @param className
+ * @param classroom
  * @returns 
  */
-export const getNoticesRepo = async (className: string) => {
-  try {
-    const noticeList = await fetchQuery(
-      api.notice.getNotices,
-      { className: className }
-    );
-    return noticeList;
-  } catch (error) {
-    console.error(`Failed to get notice list from db: ${error}`);
-    return null;
-  }
-}
+// export const getNoticesRepo = async (classroom: string) => {
+//   try {
+//     const noticeList = await fetchQuery(
+//       api.notice.getNotices,
+//       { classroom: classroom }
+//     );
+//     return noticeList;
+//   } catch (error) {
+//     console.error(`Failed to get notice list from db: ${error}`);
+//     return null;
+//   }
+// }
 
-export const searchNoticesRepo = async (className: string, keyword: string) => {
-  try {
-    const searchResult = await fetchQuery(
-      api.notice.searchNotices,
-      { className: className, keyword: keyword }
-    );
-    return searchResult;
-  } catch (error) {
-    console.error(`Failed to search notice: ${error}`);
-    return null;
-  }
-}
 
-export const createNoticeRepo = async (className: string, title: string, description: string) => {
+export const createNoticeRepo = async (classroom: string, title: string, description: string) => {
   try {
     const newNotice = await fetchMutation(
       api.notice.createNotice,
       {
-        className: className,
+        classroom: classroom,
         title: title,
         description: description
       }

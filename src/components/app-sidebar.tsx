@@ -18,11 +18,11 @@ import { useUser } from "@clerk/nextjs"
 
 // This is sample data.
 const data = {
-  user: {
-    name: "Peter",
-    email: "peter@example.com",
-    avatar: "/avatar.png",
-  },
+  // user: {
+  //   name: "Peter",
+  //   email: "peter@example.com",
+  //   avatar: "/avatar.png",
+  // },
   navMain: [
     {
       title: "Class Management",
@@ -48,7 +48,11 @@ const data = {
 }
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-  const { user } = useUser();
+  const { user, isLoaded, isSignedIn } = useUser();
+  if (!isLoaded || !isSignedIn) {
+    return null;
+  }
+
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
@@ -58,9 +62,9 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarContent>
       <SidebarFooter>
         <NavUser user={{
-          name: user?.username ?? '',
-          email: user?.primaryEmailAddress?.emailAddress ?? '',
-          avatar: user?.imageUrl ?? '',
+          name: user.username ?? 'username',
+          email: user.primaryEmailAddress?.emailAddress ?? 'email',
+          avatar: user.imageUrl ?? 'avatar',
         }} />
       </SidebarFooter>
       <SidebarRail />

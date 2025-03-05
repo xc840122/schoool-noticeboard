@@ -14,24 +14,26 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { AlertDialogTitle } from "../ui/alert-dialog"
-import { className } from "@/app/(dashboard)/notice/page"
 import { NoticeDataModel } from "@/types/convex-type"
-import { NoticeCreationType, NoticeCreationValidator } from "@/validators/notice-validator"
+import { NoticeCreationType, noticeCreationSchema } from "@/validators/notice-validator"
 import { createNotice, updateNotice } from "@/services/notice-service"
+import { ClassroomType } from "@/constants/class-enum"
 
 const NoticeForm = ({
   operationType,
+  classroom,
   defaultData,
   onClose,
 }: {
   operationType: 'create' | 'edit'
+  classroom: ClassroomType
   defaultData?: NoticeDataModel
   onClose?: () => void
 }) => {
 
   // Define form.
   const form = useForm<NoticeCreationType>({
-    resolver: zodResolver(NoticeCreationValidator),
+    resolver: zodResolver(noticeCreationSchema),
     defaultValues: {
       title: defaultData?.title ?? '',
       description: defaultData?.description ?? '',
@@ -40,12 +42,12 @@ const NoticeForm = ({
 
   // Define a submit handler.
   const onSubmit = (values: NoticeCreationType) => {
-    const result = NoticeCreationValidator.safeParse(values);
+    const result = noticeCreationSchema.safeParse(values);
     if (!result.success) return;
     // Call create or update message function
     switch (operationType) {
       case 'create':
-        createNotice(className, values.title, values.description);
+        createNotice(classroom, values.title, values.description);
         break;
       case 'edit':
         if (defaultData?._id) {

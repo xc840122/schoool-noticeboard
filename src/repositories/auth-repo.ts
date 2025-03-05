@@ -3,9 +3,32 @@ import { api } from "../../convex/_generated/api";
 // import { Id } from "../../convex/_generated/dataModel";
 
 /**
+ * Mutation to process verification information
+ * @param code verification code input by new user
+ * @param classroom classroom code input by new user
+ * @returns
+ */
+export const signUpCodeVerificationRepo = async (code: string, classroom: string) => {
+  try {
+    const verificationInfo = await fetchMutation(
+      api.auth.signUpCodeVerification,
+      { code: code, classroom: classroom }
+    );
+    if (!verificationInfo) {
+      console.error(`No verification information found from db: ${code}`);
+      return null;
+    }
+    return verificationInfo;
+  } catch (error) {
+    console.error(`Failed to update verification information in db: ${error}`);
+    return null;
+  }
+}
+
+/**
  * Query to get the verification information by code
- * @param code 
- * @returns 
+ * @param code
+ * @returns
  */
 // export const getVerificationInfoRepo = async (code: string) => {
 //   try {
@@ -28,8 +51,8 @@ import { api } from "../../convex/_generated/api";
 
 /**
  * Mutation to update the verification information
- * @param id 
- * @param isValid 
+ * @param id
+ * @param isValid
  */
 // export const updateVerificationInfoRepo = async (id: string, isValid: boolean) => {
 //   try {
@@ -42,16 +65,3 @@ import { api } from "../../convex/_generated/api";
 //     return null;
 //   }
 // }
-
-export const signUpCodeVerificationRepo = async (code: string, className: string) => {
-  try {
-    const verificationInfo = await fetchMutation(
-      api.auth.signUpCodeVerification,
-      { code: code, class: className }
-    );
-    return verificationInfo;
-  } catch (error) {
-    console.error(`Failed to update verification information in db: ${error}`);
-    return null;
-  }
-}
