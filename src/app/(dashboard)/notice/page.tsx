@@ -9,7 +9,6 @@ import SearchBar from "@/components/forms/SearchBarForm";
 import Table from "@/components/Table";
 import { TableCell, TableRow } from "@/components/ui/table";
 import NoticeForm from "@/components/forms/NoticeForm";
-import { columns } from "@/constants/notice-data";
 import { NoticeDataModel } from "@/types/convex-type";
 import { useQuery } from "convex/react";
 import { api } from "../../../../convex/_generated/api";
@@ -17,12 +16,18 @@ import Loading from "@/components/Loading";
 import { paginatedNotices } from "@/services/notice-service";
 import { useSearchParams } from "next/navigation";
 import { ConvexTimeToDisplayFormat } from "@/utils/date-convertor";
-
-export const className = '3A';
+import { useMetadata } from "@/hooks/use-metadata";
 
 const NoticePage = () => {
 
   const searchParams = useSearchParams();
+  const { role, classroom } = useMetadata();
+
+  // if (status === 'loading') {
+  //   return <Loading />;
+  // } else if (status === 'unAuthenticated') {
+  //   return <UnAuthenticated />;
+  // }
 
   // Extract page from url, defaulting to '1' if missing
   const pageNum = parseInt(searchParams.get('page') ?? '1');
@@ -41,20 +46,20 @@ const NoticePage = () => {
   // Get notice list
   const noticeList = useQuery(
     api.notice.getNotices,
-    { className: className }
+    { classroom: classroom }
   );
 
   // Get search result if search value is not empty
   const searchResult = useQuery(
     api.notice.searchNotices,
-    { className: className, keyword: searchValue }
+    { classroom: classroom, keyword: searchValue }
   );
 
   // Get date range result if start and end date are not empty
   const dateRangeResult = useQuery(
     api.notice.getNoticesWithDateRange,
     {
-      className: className,
+      classroom: classroom,
       startDate: (new Date(startDate)).getTime(),
       endDate: (new Date(endDate)).getTime()
     }
@@ -84,7 +89,7 @@ const NoticePage = () => {
         <TableCell className="font-medium">{item.title}</TableCell>
         <TableCell>{item.description}</TableCell>
         <TableCell>{ConvexTimeToDisplayFormat(item._creationTime)}</TableCell>
-        <TableCell>
+        {role === 'teacher' ? <TableCell>
           {/* Bind FormModal to buttons*/}
           <div className="flex gap-2">
             {/* Delete button and dialog */}
@@ -100,10 +105,30 @@ const NoticePage = () => {
               <NoticeForm operationType="edit" defaultData={item} />
             </DialogModal>
           </div>
-        </TableCell>
+        </TableCell> : null}
       </TableRow>
     )
   }
+
+  // Column data
+  const columns = [
+    {
+      header: 'Title',
+      accessor: 'title',
+    },
+    {
+      header: 'Description',
+      accessor: 'description',
+    },
+    {
+      header: 'Time',
+      accessor: 'time',
+    },
+    role === 'teacher' ? {
+      header: 'Actions',
+      accessor: 'action',
+    } : { header: '', accessor: 'action' }
+  ];
 
   return (
     <div className="flex flex-col container mx-auto max-w-5xl items-center gap-4 p-2">
@@ -115,12 +140,12 @@ const NoticePage = () => {
       <div className="flex flex-col md:flex-row md:justify-between items-start gap-4 w-full">
         <DatePickerWithRange className="w-full md:w-auto" />
         <SearchBar />
-        <DialogModal
+        {role === 'teacher' ? <DialogModal
           triggerButtonText="New notice"
           triggerButtonStyles="w-full md:w-auto"
         >
           <NoticeForm operationType="create" />
-        </DialogModal>
+        </DialogModal> : null}
       </div>
       {/* Table content */}
       <div className="w-full bg-gray-50 p-4 rounded-lg">
@@ -155,7 +180,7 @@ export default NoticePage
 // import { noticeItem } from "@/types/noticeType";
 
 
-// export const className = '3A';
+// export const classroom = '3A';
 
 // const columns = [
 //   {
@@ -217,7 +242,7 @@ export default NoticePage
 //   const searchValue = (search ?? '').trim();
 
 //   // Get notice map
-//   const noticeList = await getnoticeList(className, searchValue);
+//   const noticeList = await getnoticeList(classroom, searchValue);
 //   const noticesWithPageInfo = await getnoticeListWithPage(noticeList as PaginatedData<noticeItem>[]);
 
 //   // Get notice list by page number

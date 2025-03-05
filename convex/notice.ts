@@ -4,11 +4,11 @@ import { v } from "convex/values";
 
 // This function is used to get notices by class
 export const getNotices = query({
-  args: { className: v.string() },
+  args: { classroom: v.string() },
   handler: async (ctx, args) => {
     const notices = await ctx.db
       .query("notices")
-      .withIndex("by_class", q => q.eq("class", args.className))
+      .withIndex("by_class", q => q.eq("class", args.classroom))
       .order("desc")
       .collect();
     return notices;
@@ -18,7 +18,7 @@ export const getNotices = query({
 // Search notices by keyword
 export const searchNotices = query({
   args: {
-    className: v.string(),
+    classroom: v.string(),
     keyword: v.string(),
   },
   handler: async (ctx, args) => {
@@ -27,7 +27,7 @@ export const searchNotices = query({
       .withSearchIndex("search_title", q =>
         q
           .search("title", args.keyword)
-          .eq("class", args.className)
+          .eq("class", args.classroom)
       )
       .collect();
     // Sort the notices by _creationTime in descending order
@@ -39,12 +39,12 @@ export const searchNotices = query({
 
 // Create a new notice
 export const createNotice = mutation({
-  args: { className: v.string(), title: v.string(), description: v.string() },
+  args: { classroom: v.string(), title: v.string(), description: v.string() },
   handler: async (ctx, args) => {
     const notices = await ctx.db.insert("notices", {
       title: args.title,
       description: args.description,
-      class: args.className,
+      class: args.classroom,
     });
     return notices;
   },
@@ -72,12 +72,12 @@ export const deleteNotice = mutation({
 
 // Query notices with date range
 export const getNoticesWithDateRange = query({
-  args: { className: v.string(), startDate: v.number(), endDate: v.number() },
+  args: { classroom: v.string(), startDate: v.number(), endDate: v.number() },
   handler: async (ctx, args) => {
     const notices = await ctx.db
       .query("notices")
       .withIndex("by_class", q =>
-        q.eq("class", args.className)
+        q.eq("class", args.classroom)
           .gte("_creationTime", args.startDate)
           .lte("_creationTime", args.endDate)
       )

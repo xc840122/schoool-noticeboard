@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { AlertDialogTitle } from "../ui/alert-dialog"
-import { className } from "@/app/(dashboard)/notice/page"
+import { classroom } from "@/app/(dashboard)/notice/page"
 import { NoticeDataModel } from "@/types/convex-type"
 import { NoticeCreationType, NoticeCreationValidator } from "@/validators/notice-validator"
 import { createNotice, updateNotice } from "@/services/notice-service"
@@ -45,7 +45,7 @@ const NoticeForm = ({
     // Call create or update message function
     switch (operationType) {
       case 'create':
-        createNotice(className, values.title, values.description);
+        createNotice(classroom, values.title, values.description);
         break;
       case 'edit':
         if (defaultData?._id) {

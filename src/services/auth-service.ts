@@ -3,11 +3,11 @@ import { ApiResponse } from "@/types/api-type";
 import { VerificationInfoDataModel } from "@/types/convex-type";
 
 
-export const signUpVerificationService = async (code: string, className: string)
+export const signUpVerificationService = async (code: string, classroom: string)
   : Promise<ApiResponse<VerificationInfoDataModel>> => {
   try {
     // Get the verification information by code
-    const verificationInfo = await signUpCodeVerificationRepo(code, className);
+    const verificationInfo = await signUpCodeVerificationRepo(code, classroom);
 
     // // If no verification information is found,return false
     if (!verificationInfo)
@@ -18,7 +18,7 @@ export const signUpVerificationService = async (code: string, className: string)
       return { result: false, messageKey: "ERROR.INVALID_CODE" };
     }
     // If the classroom doesn't match, return false
-    if (verificationInfo.class.toLowerCase() !== className.toLowerCase()) {
+    if (verificationInfo.class.toLowerCase() !== classroom.toLowerCase()) {
       return { result: false, messageKey: "ERROR.CLASSROOM_NOT_MATCH" };
     }
     return { result: false, messageKey: "SUCCESS.VERIFICATION_SUCCESSFUL", data: verificationInfo };;

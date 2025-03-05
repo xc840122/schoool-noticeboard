@@ -10,14 +10,14 @@ import { Id } from "../../convex/_generated/dataModel";
 /**
  * Get notice list by class name from database
  * Apply beta function fetchQuery from convex/nextjs for SSR
- * @param className
+ * @param classroom
  * @returns 
  */
-export const getNoticesRepo = async (className: string) => {
+export const getNoticesRepo = async (classroom: string) => {
   try {
     const noticeList = await fetchQuery(
       api.notice.getNotices,
-      { className: className }
+      { classroom: classroom }
     );
     return noticeList;
   } catch (error) {
@@ -26,11 +26,11 @@ export const getNoticesRepo = async (className: string) => {
   }
 }
 
-export const searchNoticesRepo = async (className: string, keyword: string) => {
+export const searchNoticesRepo = async (classroom: string, keyword: string) => {
   try {
     const searchResult = await fetchQuery(
       api.notice.searchNotices,
-      { className: className, keyword: keyword }
+      { classroom: classroom, keyword: keyword }
     );
     return searchResult;
   } catch (error) {
@@ -39,12 +39,12 @@ export const searchNoticesRepo = async (className: string, keyword: string) => {
   }
 }
 
-export const createNoticeRepo = async (className: string, title: string, description: string) => {
+export const createNoticeRepo = async (classroom: string, title: string, description: string) => {
   try {
     const newNotice = await fetchMutation(
       api.notice.createNotice,
       {
-        className: className,
+        classroom: classroom,
         title: title,
         description: description
       }

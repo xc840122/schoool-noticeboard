@@ -5,14 +5,14 @@ import { api } from "../../convex/_generated/api";
 /**
  * Mutation to process verification information
  * @param code verification code input by new user
- * @param className classroom code input by new user
+ * @param classroom classroom code input by new user
  * @returns
  */
-export const signUpCodeVerificationRepo = async (code: string, className: string) => {
+export const signUpCodeVerificationRepo = async (code: string, classroom: string) => {
   try {
     const verificationInfo = await fetchMutation(
       api.auth.signUpCodeVerification,
-      { code: code, class: className }
+      { code: code, class: classroom }
     );
     if (!verificationInfo) {
       console.error(`No verification information found from db: ${code}`);

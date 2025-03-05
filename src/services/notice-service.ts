@@ -5,15 +5,15 @@ import { NoticeCreationValidator, SearchInputValidator } from "@/validators/noti
 import { Id } from "../../convex/_generated/dataModel";
 
 // Get notice list,convert to page map
-export const getNoticesService = async (className: string, keyword: string) => {
+export const getNoticesService = async (classroom: string, keyword: string) => {
   try {
     // Validate keyword
     const result = SearchInputValidator.safeParse({ keyword: keyword });
     const searchInput = result.success ? result.data.keyword : null;
     // Get notice list from repository, call search if keyword is not null
     const notices = searchInput !== null
-      ? await searchNoticesRepo(className, searchInput)
-      : await getNoticesRepo(className);
+      ? await searchNoticesRepo(classroom, searchInput)
+      : await getNoticesRepo(classroom);
 
     // Return error if no notice is found
     if (!notices) {
@@ -46,7 +46,7 @@ export const paginatedNotices = (notices: NoticeDataModel[]): Map<number, Notice
 }
 
 // Create a new notice
-export const createNotice = async (className: string, title: string, description: string) => {
+export const createNotice = async (classroom: string, title: string, description: string) => {
   try {
     // Validate form input
     const result = NoticeCreationValidator.safeParse({ title: title, description: description });
@@ -54,7 +54,7 @@ export const createNotice = async (className: string, title: string, description
       return { result: false, messageKey: "ERROR.INVALID_INPUT" };
     }
     // Create new notice
-    return await createNoticeRepo(className, title, description);
+    return await createNoticeRepo(classroom, title, description);
   } catch (error) {
     console.error(`Failed to create notice: ${error}`);
     return { result: false, messageKey: "ERROR.UNKNOWN" };
