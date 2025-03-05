@@ -1,4 +1,7 @@
-export enum ClassName {
+/**
+ * Enum for classroom
+ */
+export enum ClassroomEnum {
   Year1A = "1A",
   Year1B = "1B",
   Year2A = "2A",

@@ -12,16 +12,19 @@ import Loading from "@/components/Loading";
 import { paginatedNotices } from "@/services/notice-service";
 import { ConvexTimeToDisplayFormat } from "@/utils/date-convertor";
 import UnAuthenticated from "@/components/UnAuthenticated";
+import { ClassroomEnum } from "@/constants/class-enum";
 
 export const NoticePageContent = ({
   pageNum,
   status,
   role,
-  notices
+  notices,
+  classroom
 }: {
   pageNum: number,
   status: 'loading' | 'unAuthenticated' | 'authenticated',
   role: 'student' | 'teacher',
+  classroom: ClassroomEnum,
   notices: NoticeDataModel[] | undefined
 }) => {
 
@@ -57,7 +60,7 @@ export const NoticePageContent = ({
             <DialogModal
               triggerButtonText="Edit"
             >
-              <NoticeForm operationType="edit" defaultData={item} />
+              <NoticeForm operationType="edit" classroom={classroom} defaultData={item} />
             </DialogModal>
           </div>
         </TableCell> : null}
@@ -99,7 +102,7 @@ export const NoticePageContent = ({
           triggerButtonText="New notice"
           triggerButtonStyles="w-full md:w-auto"
         >
-          <NoticeForm operationType="create" />
+          <NoticeForm operationType="create" classroom={classroom} />
         </DialogModal> : null}
       </div>
       {/* Table content */}

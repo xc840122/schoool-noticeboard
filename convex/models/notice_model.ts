@@ -24,6 +24,7 @@ export const getNoticesModel = async (
       // Validate keyword
       const result = SearchInputValidator.safeParse({ keyword: keyword });
       const validKeyword = result.success ? result.data.keyword : null;
+
       if (!validKeyword) {
         throw new Error(`Invalid keyword: ${keyword}`);
       }

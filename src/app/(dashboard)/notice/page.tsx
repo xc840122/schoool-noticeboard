@@ -18,7 +18,7 @@ const NoticePage = () => {
   const notices = useQuery(
     api.notice.getNotices,
     {
-      classroom: classroom,
+      classroom: classroom ?? '',
       keyword: searchValue,
       startDate: DateToConvexTime(startDate),
       endDate: DateToConvexTime(endDate)
@@ -27,7 +27,12 @@ const NoticePage = () => {
 
   return (
     <Suspense fallback={<Loading />}>
-      <NoticePageContent pageNum={pageNum} status={status} role={role} notices={notices} />
+      <NoticePageContent
+        pageNum={pageNum}
+        status={status}
+        role={role}
+        notices={notices}
+        classroom={classroom!} />
     </Suspense>
   )
 

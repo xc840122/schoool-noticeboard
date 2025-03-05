@@ -14,17 +14,19 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { AlertDialogTitle } from "../ui/alert-dialog"
-import { classroom } from "@/app/(dashboard)/notice/page"
 import { NoticeDataModel } from "@/types/convex-type"
 import { NoticeCreationType, NoticeCreationValidator } from "@/validators/notice-validator"
 import { createNotice, updateNotice } from "@/services/notice-service"
+import { ClassroomType } from "@/constants/class-enum"
 
 const NoticeForm = ({
   operationType,
+  classroom,
   defaultData,
   onClose,
 }: {
   operationType: 'create' | 'edit'
+  classroom: ClassroomType
   defaultData?: NoticeDataModel
   onClose?: () => void
 }) => {
