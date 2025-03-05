@@ -5,15 +5,19 @@ import { getVerificationInfoModel, updateVerificationInfoModel } from "./models/
 
 // Mutation to process verification information
 export const signUpCodeVerification = mutation({
-  args: { code: v.string(), class: v.string() },
+  args: { code: v.string(), classroom: v.string() },
   handler: async (ctx, args) => {
     try {
       // Fetch verification information
       const verificationInfo = await getVerificationInfoModel(ctx, args.code);
-      // If no verification information is found
-      if (!verificationInfo) {
+
+      // Check if verification information is valid
+      if (!verificationInfo
+        || verificationInfo.isValid !== true
+        || verificationInfo.class.toLowerCase() !== args.classroom.toLowerCase()) {
         return null;
       }
+
       await updateVerificationInfoModel(ctx, verificationInfo._id, false);
       return verificationInfo;
     } catch (error) {

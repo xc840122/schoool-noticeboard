@@ -1,14 +1,14 @@
 import { ITEM_PER_PAGE } from "@/lib/settings";
 import { createNoticeRepo, deleteNoticeRepo, updateNoticeRepo } from "@/repositories/notice-repo";
 import { NoticeDataModel } from "@/types/convex-type";
-import { NoticeCreationValidator } from "@/validators/notice-validator";
+import { noticeCreationSchema } from "@/validators/notice-validator";
 import { Id } from "../../convex/_generated/dataModel";
 
 // Get notice list,convert to page map
 // export const getNoticesService = async (classroom: string, keyword: string) => {
 //   try {
 //     // Validate keyword
-//     const result = SearchInputValidator.safeParse({ keyword: keyword });
+//     const result = searchInputSchema.safeParse({ keyword: keyword });
 //     const searchInput = result.success ? result.data.keyword : null;
 //     // Get notice list from repository, call search if keyword is not null
 //     const notices = searchInput !== null
@@ -66,7 +66,7 @@ export const paginatedNotices = (notices: NoticeDataModel[]): Map<number, Notice
 export const createNotice = async (classroom: string, title: string, description: string) => {
   try {
     // Validate form input
-    const result = NoticeCreationValidator.safeParse({ title: title, description: description });
+    const result = noticeCreationSchema.safeParse({ title: title, description: description });
     if (!result.success) {
       return { result: false, messageKey: "ERROR.INVALID_INPUT" };
     }
@@ -82,7 +82,7 @@ export const createNotice = async (classroom: string, title: string, description
 export const updateNotice = async (id: Id<'notices'>, title: string, description: string) => {
   try {
     // Validate form input
-    const result = NoticeCreationValidator.safeParse({ title: title, description: description });
+    const result = noticeCreationSchema.safeParse({ title: title, description: description });
     if (!result.success) {
       return { result: false, messageKey: "ERROR.INVALID_INPUT" };
     }

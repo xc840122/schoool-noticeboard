@@ -15,7 +15,7 @@ import {
 import { Input } from "@/components/ui/input"
 import { AlertDialogTitle } from "../ui/alert-dialog"
 import { NoticeDataModel } from "@/types/convex-type"
-import { NoticeCreationType, NoticeCreationValidator } from "@/validators/notice-validator"
+import { NoticeCreationType, noticeCreationSchema } from "@/validators/notice-validator"
 import { createNotice, updateNotice } from "@/services/notice-service"
 import { ClassroomType } from "@/constants/class-enum"
 
@@ -33,7 +33,7 @@ const NoticeForm = ({
 
   // Define form.
   const form = useForm<NoticeCreationType>({
-    resolver: zodResolver(NoticeCreationValidator),
+    resolver: zodResolver(noticeCreationSchema),
     defaultValues: {
       title: defaultData?.title ?? '',
       description: defaultData?.description ?? '',
@@ -42,7 +42,7 @@ const NoticeForm = ({
 
   // Define a submit handler.
   const onSubmit = (values: NoticeCreationType) => {
-    const result = NoticeCreationValidator.safeParse(values);
+    const result = noticeCreationSchema.safeParse(values);
     if (!result.success) return;
     // Call create or update message function
     switch (operationType) {

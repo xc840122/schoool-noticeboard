@@ -12,7 +12,7 @@ export const signUpCodeVerificationRepo = async (code: string, classroom: string
   try {
     const verificationInfo = await fetchMutation(
       api.auth.signUpCodeVerification,
-      { code: code, class: classroom }
+      { code: code, classroom: classroom }
     );
     if (!verificationInfo) {
       console.error(`No verification information found from db: ${code}`);

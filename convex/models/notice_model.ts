@@ -1,4 +1,4 @@
-import { SearchInputValidator } from "@/validators/notice-validator";
+import { searchInputSchema } from "@/validators/notice-validator";
 import { Id } from "../_generated/dataModel";
 import { MutationCtx, QueryCtx } from "../_generated/server";
 
@@ -22,7 +22,7 @@ export const getNoticesModel = async (
   try {
     if (keyword) {
       // Validate keyword
-      const result = SearchInputValidator.safeParse({ keyword: keyword });
+      const result = searchInputSchema.safeParse({ keyword: keyword });
       const validKeyword = result.success ? result.data.keyword : null;
 
       if (!validKeyword) {

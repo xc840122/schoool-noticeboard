@@ -1,7 +1,7 @@
 'use client'
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { SearchInputValidator } from "@/validators/notice-validator";
+import { searchInputSchema } from "@/validators/notice-validator";
 import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -17,7 +17,7 @@ const SearchBar = () => {
     // Get the input value
     const value = (e.currentTarget.elements.namedItem('search') as HTMLInputElement).value;
     // Validate the input
-    const result = SearchInputValidator.safeParse({ keyword: value });
+    const result = searchInputSchema.safeParse({ keyword: value });
     if (!result.success) {
       setError("Please input valid characters,suport a-z,A-Z,0-9");
       return;
