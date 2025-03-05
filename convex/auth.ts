@@ -24,20 +24,10 @@ export const signUpCodeVerification = mutation({
     try {
       // Fetch verification information
       const verificationInfo = await getVerificationInfoModel(ctx, args.code);
-
-      // If no verification information is found,return false
+      // If no verification information is found
       if (!verificationInfo) {
         return null;
       }
-      // If the verification code is invalid, return false
-      if (verificationInfo.isValid !== true) {
-        return null;
-      }
-      // If the classroom doesn't match, return false
-      if (verificationInfo.class !== args.class) {
-        return null;
-      }
-      // Update verification information,set to false
       await updateVerificationInfoModel(ctx, verificationInfo._id, false);
       return verificationInfo;
     } catch (error) {

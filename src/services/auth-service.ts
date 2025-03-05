@@ -18,7 +18,7 @@ export const signUpVerificationService = async (code: string, className: string)
       return { result: false, messageKey: "ERROR.INVALID_CODE" };
     }
     // If the classroom doesn't match, return false
-    if (verificationInfo.class !== className) {
+    if (verificationInfo.class.toLowerCase() !== className.toLowerCase()) {
       return { result: false, messageKey: "ERROR.CLASSROOM_NOT_MATCH" };
     }
     return { result: false, messageKey: "SUCCESS.VERIFICATION_SUCCESSFUL", data: verificationInfo };;
