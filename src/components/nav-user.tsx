@@ -28,7 +28,7 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar"
 import { useRouter } from "next/navigation"
-import { SignOutButton } from "@clerk/nextjs"
+import { SignOutButton, useClerk } from "@clerk/nextjs"
 
 export function NavUser({
   user,
@@ -41,6 +41,7 @@ export function NavUser({
 }) {
   const { isMobile } = useSidebar()
   const router = useRouter();
+  const { signOut } = useClerk()
 
   return (
     <SidebarMenu>
@@ -103,9 +104,13 @@ export function NavUser({
               </DropdownMenuItem> */}
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
+            <DropdownMenuItem onClick={() => signOut({
+              redirectUrl: "/sign-in"
+            })}>
               <LogOut />
               Sign out
+              {/* SignOutButton not work for whole DropdownMenuItem area */}
+              {/* <SignOutButton /> */}
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
