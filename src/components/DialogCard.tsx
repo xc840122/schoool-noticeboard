@@ -18,8 +18,16 @@ const DialogCard = ({ defaultData }: { defaultData: NoticeDataModel }) => {
     feedback: { result: false, message: "" }
   });
 
-  // Prevent multiple toasts by using useEffect to listen to the feedback state change
+  /**
+   * Prevent multiple toasts by using useEffect and judgement(message) to listen to the feedback state change
+   * useActionState triggers renders before the user confirms the action. 
+   * This is because it tracks the state changes that happen during the asynchronous operation (delete action) 
+   * and updates the state accordingly.It doesn't wait for the user to confirm.
+   */
   useEffect(() => {
+    // useActionState trace the status
+    // Avoid empty toast coz the default message is empty, 
+    // it generates toast before conforming
     if (state.feedback.message) {
       if (state.feedback.result) {
         toast.success(state.feedback.message);
@@ -28,16 +36,6 @@ const DialogCard = ({ defaultData }: { defaultData: NoticeDataModel }) => {
       }
     }
   }, [state.feedback]);
-
-  // useEffect(() => {
-  //   // Handle the toast message
-  //   if (state.feedback.result) {
-  //     toast.success(state.feedback.message);
-  //   }
-  //   else {
-  //     toast.error(state.feedback.message);
-  //   }
-  // }, [state.feedback]);
 
   return (
     <>
