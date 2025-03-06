@@ -38,6 +38,7 @@ export const NoticePageContent = ({
 
   // Get notice list by page number
   const noticesPerPage = paginatedNotices(notices).get(pageNum);
+  console.log('noticesPerPage', noticesPerPage);
 
   const renderRow = (item: NoticeDataModel) => {
     return (

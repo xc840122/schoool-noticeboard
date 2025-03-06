@@ -7,9 +7,9 @@ import { v } from "convex/values";
 export default defineSchema({
   // Message schema
   notices: defineTable({
+    class: v.string(),
     title: v.string(),
     description: v.string(),
-    class: v.string(),
   })
     .index("by_class", ["class"]) // Index for filtering by class
     .searchIndex("search_title", {

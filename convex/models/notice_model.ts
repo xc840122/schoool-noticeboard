@@ -78,9 +78,9 @@ export const createNoticeModel = async (
       throw new Error(`Invalid input: ${classroom}, ${title}, ${description}`);
     }
     return await ctx.db.insert("notices", {
+      class: classroom,
       title: title,
       description: description,
-      class: classroom,
     });
 
   } catch (error) {
