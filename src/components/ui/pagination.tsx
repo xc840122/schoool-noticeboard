@@ -59,6 +59,7 @@ const PaginationLink = ({
   >
     <Link
       scroll={false}
+      shallow={true}
       aria-current={isActive ? "page" : undefined}
       className={cn(
         buttonVariants({

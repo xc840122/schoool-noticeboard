@@ -30,7 +30,7 @@ const SearchBar = () => {
       // Reset page number 1 after triggering search
       params.set("page", "1");
       // Update the URL with search query and reset page
-      router.push(`${path}?${params.toString()}`);
+      router.push(`${path}?${params.toString()}`, { scroll: false });
       // Clear the input field after search
       (e.currentTarget.elements.namedItem('search') as HTMLInputElement).value = '';
       setError(null);  // Clear any previous errors on successful search

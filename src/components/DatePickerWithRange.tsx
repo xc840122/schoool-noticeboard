@@ -80,7 +80,7 @@ export function DatePickerWithRange({ className }: React.HTMLAttributes<HTMLDivE
       params.set("page", "1"); // Reset page to 1 after the search
 
       // Update the URL with date range query and reset page
-      router.push(`${path}?${params.toString()}`, undefined);
+      router.push(`${path}?${params.toString()}`, { scroll: false });
 
       // Update date state to reflect the selected range
       setDate(tempDate);
