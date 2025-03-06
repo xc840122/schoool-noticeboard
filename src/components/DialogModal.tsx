@@ -23,6 +23,7 @@ const DialogModal = ({
 }: ModalProps) => {
 
   const [isOpen, setIsOpen] = useState(false);
+
   return (
     <AlertDialog open={isOpen} onOpenChange={setIsOpen}>
       <AlertDialogTrigger asChild>

@@ -116,7 +116,7 @@ export const SignInPage = () => {
 
               {/* Sign-Up Link */}
               <div className="flex justify-center items-center mt-2">
-                <span>Not a user yet?&nbsp;&nbsp;</span>
+                <span>Not join yet?&nbsp;&nbsp;</span>
                 <SignUpButton >
                   <span className='text-xs text-gray-500 cursor-pointer'>Sign up</span>
                 </SignUpButton>

@@ -17,7 +17,10 @@ import { AlertDialogTitle } from "../ui/alert-dialog"
 import { NoticeDataModel } from "@/types/convex-type"
 import { NoticeCreationType, noticeCreationSchema } from "@/validators/notice-validator"
 import { createNotice, updateNotice } from "@/services/notice-service"
-import { ClassroomType } from "@/constants/class-enum"
+import { ClassroomEnum } from "@/constants/class-enum"
+import { toast } from "sonner"
+import { NOTICE_MESSAGES } from "@/constants/messages/notice-message"
+
 
 const NoticeForm = ({
   operationType,
@@ -26,7 +29,7 @@ const NoticeForm = ({
   onClose,
 }: {
   operationType: 'create' | 'edit'
-  classroom: ClassroomType
+  classroom: ClassroomEnum
   defaultData?: NoticeDataModel
   onClose?: () => void
 }) => {
@@ -41,19 +44,31 @@ const NoticeForm = ({
   })
 
   // Define a submit handler.
-  const onSubmit = (values: NoticeCreationType) => {
+  const onSubmit = async (values: NoticeCreationType) => {
     const result = noticeCreationSchema.safeParse(values);
     if (!result.success) return;
     // Call create or update message function
     switch (operationType) {
       case 'create':
-        createNotice(classroom, values.title, values.description);
+        const response = await createNotice(classroom, values.title, values.description);
+        // Show toast message
+        if (response.result) {
+          toast.success(NOTICE_MESSAGES.SUCCESS.CREATE_NOTICE_SUCCESSFUL)
+        }
+        else {
+          toast.error(NOTICE_MESSAGES.ERROR.CREATE_NOTICE_FAILED);
+        }
         break;
       case 'edit':
         if (defaultData?._id) {
-          updateNotice(defaultData._id, values.title, values.description);
-        } else {
-          console.error('No default data(id) to update message');
+          const response = await updateNotice(defaultData._id, values.title, values.description);
+          // Show toast message
+          if (response.result) {
+            toast.success(NOTICE_MESSAGES.SUCCESS.UPDATE_NOTICE_SUCCESSFUL)
+          }
+          else {
+            toast.error(NOTICE_MESSAGES.ERROR.UPDATE_NOTICE_FAILED);
+          }
         }
         break;
     }

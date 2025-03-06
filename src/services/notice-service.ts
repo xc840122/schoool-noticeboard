@@ -3,6 +3,7 @@ import { createNoticeRepo, deleteNoticeRepo, updateNoticeRepo } from "@/reposito
 import { NoticeDataModel } from "@/types/convex-type";
 import { noticeCreationSchema } from "@/validators/notice-validator";
 import { Id } from "../../convex/_generated/dataModel";
+import { ApiResponse } from "@/types/api-type";
 
 // Get notice list,convert to page map
 // export const getNoticesService = async (classroom: string, keyword: string) => {
@@ -63,7 +64,7 @@ export const paginatedNotices = (notices: NoticeDataModel[]): Map<number, Notice
  * @param description 
  * @returns 
  */
-export const createNotice = async (classroom: string, title: string, description: string) => {
+export const createNotice = async (classroom: string, title: string, description: string): Promise<ApiResponse<Id<"notices">>> => {
   try {
     // Validate form input
     const result = noticeCreationSchema.safeParse({ title: title, description: description });
@@ -71,7 +72,8 @@ export const createNotice = async (classroom: string, title: string, description
       return { result: false, messageKey: "ERROR.INVALID_INPUT" };
     }
     // Create new notice
-    return await createNoticeRepo(classroom, title, description);
+    const createResult = await createNoticeRepo(classroom, title, description);
+    return { result: true, messageKey: "SUCCESS.CREATE_NOTICE", data: createResult };
   } catch (error) {
     console.error(`Failed to create notice: ${error}`);
     throw new Error("Create notice failed");
@@ -79,7 +81,7 @@ export const createNotice = async (classroom: string, title: string, description
 }
 
 // Update a notice
-export const updateNotice = async (id: Id<'notices'>, title: string, description: string) => {
+export const updateNotice = async (id: Id<'notices'>, title: string, description: string): Promise<ApiResponse> => {
   try {
     // Validate form input
     const result = noticeCreationSchema.safeParse({ title: title, description: description });
@@ -88,16 +90,18 @@ export const updateNotice = async (id: Id<'notices'>, title: string, description
     }
     // Update notice
     await updateNoticeRepo(id, title, description);
+    return { result: true, messageKey: "SUCCESS.UPDATE_NOTICE" };
   } catch (error) {
     console.error(`Failed to update notice: ${error}`);
     throw new Error("Update notice failed");
   }
 }
 
-export const deleteNotice = async (id: Id<'notices'>) => {
+export const deleteNotice = async (id: string): Promise<ApiResponse> => {
   try {
     // Delete notice
     await deleteNoticeRepo(id);
+    return { result: true, messageKey: "SUCCESS.DELETE_NOTICE" };
   } catch (error) {
     console.error(`Failed to delete notice: ${error}`);
     throw new Error("Delete notice failed");

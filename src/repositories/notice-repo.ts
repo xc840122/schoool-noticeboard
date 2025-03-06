@@ -27,9 +27,9 @@ import { Id } from "../../convex/_generated/dataModel";
 // }
 
 
-export const createNoticeRepo = async (classroom: string, title: string, description: string) => {
+export const createNoticeRepo = async (classroom: string, title: string, description: string): Promise<Id<"notices">> => {
   try {
-    const newNotice = await fetchMutation(
+    return await fetchMutation(
       api.notice.createNotice,
       {
         classroom: classroom,
@@ -37,11 +37,9 @@ export const createNoticeRepo = async (classroom: string, title: string, descrip
         description: description
       }
     );
-    // console.log('New notice:', newNotice);
-    return newNotice;
   } catch (error) {
     console.error(`Failed to create notice: ${error}`);
-    return null;
+    throw new Error("Create notice failed");
   }
 }
 
