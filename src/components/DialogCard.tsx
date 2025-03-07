@@ -1,7 +1,7 @@
 'use client'
-
-import deleteNoticeAction from "@/actions/delete-action";
+import { deleteNoticeAction } from "@/actions/notice/delete-action";
 import {
+  AlertDialogAction,
   AlertDialogCancel,
   AlertDialogDescription,
   AlertDialogFooter,
@@ -11,9 +11,8 @@ import {
 import { NoticeDataModel } from "@/types/convex-type";
 import { useActionState, useEffect } from "react";
 import { toast } from "sonner";
-import { Button } from "../ui/button";
 
-const DeleteNoticeForm = ({ defaultData }: { defaultData: NoticeDataModel }) => {
+const DialogCard = ({ defaultData }: { defaultData: NoticeDataModel }) => {
 
   const [state, formAction, isPending] = useActionState(deleteNoticeAction, {
     feedback: { result: false, message: "" }
@@ -56,15 +55,13 @@ const DeleteNoticeForm = ({ defaultData }: { defaultData: NoticeDataModel }) => 
           action={formAction}
         >
           <input type="hidden" name="id" value={defaultData._id} />
-          <Button
-            disabled={isPending}
-          >
+          <AlertDialogAction disabled={isPending}>
             {isPending ? "Deleting..." : "Confirm"}
-          </Button>
+          </AlertDialogAction>
         </form>
       </AlertDialogFooter>
     </>
   );
 };
 
-export default DeleteNoticeForm;
+export default DialogCard;

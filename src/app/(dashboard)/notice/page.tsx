@@ -4,10 +4,12 @@ import { useQuery } from "convex/react";
 import { DateToConvexTime } from "@/utils/date-convertor";
 import { useMetadata } from "@/hooks/use-metadata";
 import { useURLParams } from "@/hooks/use-params";
+import NoticePageContent from "./notice-page";
 import { api } from "../../../../convex/_generated/api";
-import NoticeListContent from "./notice-list";
+import { Suspense } from "react";
+import Loading from "@/components/Loading";
 
-const NoticeListWrapper = () => {
+const NoticePage = () => {
   // Get search value, start date, end date, page number from URL
   const { searchValue, startDate, endDate, pageNum } = useURLParams();
   // Get role and classroom from session (metadata)
@@ -24,14 +26,16 @@ const NoticeListWrapper = () => {
   );
 
   return (
-    <NoticeListContent
-      pageNum={pageNum}
-      status={status}
-      role={role}
-      notices={notices}
-      classroom={classroom!}
-    />
+    <Suspense fallback={<Loading />}>
+      <NoticePageContent
+        pageNum={pageNum}
+        status={status}
+        role={role}
+        notices={notices}
+        classroom={classroom!} />
+    </Suspense>
   )
+
 }
 
-export default NoticeListWrapper
+export default NoticePage

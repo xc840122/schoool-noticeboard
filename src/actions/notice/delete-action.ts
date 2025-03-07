@@ -1,6 +1,14 @@
 import { NOTICE_MESSAGES } from "@/constants/messages/notice-message";
 import { deleteNotice } from "@/services/notice-service";
-import type { Feedback, FormState } from "@/types/action-type";
+
+type Feedback = {
+  result: boolean;
+  message: string;
+}
+
+type FormState = {
+  feedback: Feedback;
+};
 
 /**
  * SSR action, delete a notice
@@ -8,7 +16,7 @@ import type { Feedback, FormState } from "@/types/action-type";
  * @param formData
  *  
  * */
-const deleteNoticeAction = async (prevState: FormState, formData: FormData) => {
+export const deleteNoticeAction = async (prevState: FormState, formData: FormData) => {
   try {
     // Initial the feedback
     const feedback: Feedback = { result: false, message: "" };
@@ -16,7 +24,7 @@ const deleteNoticeAction = async (prevState: FormState, formData: FormData) => {
     const id = formData.get('id') as string;
     // Call service to delete notice
     const response = await deleteNotice(id);
-    // Set state according to response,for toast use
+    // Set state according to response
     if (response.result) {
       feedback.result = true;
       feedback.message = NOTICE_MESSAGES.SUCCESS.DELETE_NOTICE_SUCCESSFUL;
@@ -31,5 +39,3 @@ const deleteNoticeAction = async (prevState: FormState, formData: FormData) => {
     throw new Error("Delete notice failed");
   }
 };
-
-export default deleteNoticeAction;
