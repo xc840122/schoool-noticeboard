@@ -12,6 +12,7 @@ export const NOTICE_MESSAGES = {
     CREATE_NOTICE_FAILED: "Failed to create the notice.",
     NOTICE_NOT_FOUND: "The notice information doesn't exist.",
     INVALID_INPUT: "The input is invalid.",
+    INVALID_SEARTCH_INPUT: "Please input valid characters,suport a-z,A-Z,0-9",
     UNKNOWN: "An unknown error occurred.",
   },
 } as const;

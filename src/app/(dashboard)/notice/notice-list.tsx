@@ -1,5 +1,5 @@
 import { DatePickerWithRange } from "@/components/DatePickerWithRange";
-import DialogCard from "@/components/DialogCard";
+import DialogCard from "@/components/forms/DeleteNoticeForm";
 import DialogModal from "@/components/DialogModal";
 import Pagination from "@/components/Pagination";
 import SearchBar from "@/components/forms/SearchBarForm";
@@ -10,11 +10,11 @@ import { NoticeDataModel } from "@/types/convex-type";
 import Loading from "@/components/Loading";
 import { paginatedNotices } from "@/services/notice-service";
 import { ConvexTimeToDisplayFormat } from "@/utils/date-convertor";
-import UnAuthenticated from "@/components/UnAuthenticated";
 import { ClassroomEnum } from "@/constants/class-enum";
 import { ITEM_PER_PAGE } from "@/lib/settings";
+import { SignIn } from "@clerk/nextjs";
 
-export const NoticePageContent = ({
+export const NoticeListContent = ({
   pageNum,
   status,
   role,
@@ -30,14 +30,13 @@ export const NoticePageContent = ({
 
   // Handle the Loading, unAuthenticated
   if (!notices) return <Loading />;
-  if (status === 'unAuthenticated') return <UnAuthenticated />;
+  if (status === 'unAuthenticated') return <SignIn />;
 
   // Get total pages
   const totalPages = Math.ceil(notices.length / ITEM_PER_PAGE);
 
   // Get notice list by page number
   const noticesPerPage = paginatedNotices(notices).get(pageNum);
-  console.log('noticesPerPage', noticesPerPage);
 
   const renderRow = (item: NoticeDataModel) => {
     return (
@@ -112,7 +111,7 @@ export const NoticePageContent = ({
   )
 }
 
-export default NoticePageContent
+export default NoticeListContent
 
 
 /**

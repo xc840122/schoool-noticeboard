@@ -1,3 +1,4 @@
+// Type definitions for API responses
 export type ApiResponse<T = null> = {
   result: boolean;
   messageKey: string;
