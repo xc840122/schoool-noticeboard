@@ -1,14 +1,6 @@
 import { NOTICE_MESSAGES } from "@/constants/messages/notice-message";
 import { deleteNotice } from "@/services/notice-service";
-
-type Feedback = {
-  result: boolean;
-  message: string;
-}
-
-type FormState = {
-  feedback: Feedback;
-};
+import type { Feedback, FormState } from "@/types/action-type";
 
 /**
  * SSR action, delete a notice
@@ -24,7 +16,7 @@ export const deleteNoticeAction = async (prevState: FormState, formData: FormDat
     const id = formData.get('id') as string;
     // Call service to delete notice
     const response = await deleteNotice(id);
-    // Set state according to response
+    // Set state according to response,for toast use
     if (response.result) {
       feedback.result = true;
       feedback.message = NOTICE_MESSAGES.SUCCESS.DELETE_NOTICE_SUCCESSFUL;

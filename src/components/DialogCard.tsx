@@ -55,7 +55,9 @@ const DialogCard = ({ defaultData }: { defaultData: NoticeDataModel }) => {
           action={formAction}
         >
           <input type="hidden" name="id" value={defaultData._id} />
-          <AlertDialogAction disabled={isPending}>
+          <AlertDialogAction
+            disabled={isPending}
+          >
             {isPending ? "Deleting..." : "Confirm"}
           </AlertDialogAction>
         </form>

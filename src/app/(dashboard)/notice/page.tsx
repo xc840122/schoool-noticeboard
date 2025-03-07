@@ -1,41 +1,32 @@
-'use client';
+import { DatePickerWithRange } from "@/components/DatePickerWithRange";
+import DialogModal from "@/components/DialogModal";
+import SearchBar from "@/components/forms/SearchBarForm";
+import NoticeForm from "@/components/forms/NoticeForm";
+import userHelper from "@/helper/user-helper";
+import { SignIn } from "@clerk/nextjs";
 
-import { useQuery } from "convex/react";
-import { DateToConvexTime } from "@/utils/date-convertor";
-import { useMetadata } from "@/hooks/use-metadata";
-import { useURLParams } from "@/hooks/use-params";
-import NoticePageContent from "./notice-page";
-import { api } from "../../../../convex/_generated/api";
-import { Suspense } from "react";
-import Loading from "@/components/Loading";
+export const NoticePage = async () => {
 
-const NoticePage = () => {
-  // Get search value, start date, end date, page number from URL
-  const { searchValue, startDate, endDate, pageNum } = useURLParams();
-  // Get role and classroom from session (metadata)
-  const { status, role, classroom } = useMetadata();
-  // Get notice list (auto handle search, date range)
-  const notices = useQuery(
-    api.notice.getNotices,
-    {
-      classroom: classroom ?? '',
-      keyword: searchValue,
-      startDate: DateToConvexTime(startDate),
-      endDate: DateToConvexTime(endDate)
-    }
-  );
+  // Get user role and classroom
+  const user = await userHelper();
+  if (!user) return <SignIn />;
+  const { role, classroom } = user;
 
   return (
-    <Suspense fallback={<Loading />}>
-      <NoticePageContent
-        pageNum={pageNum}
-        status={status}
-        role={role}
-        notices={notices}
-        classroom={classroom!} />
-    </Suspense>
+    // <div className="flex flex-col md:flex-row md:justify-between items-end gap-4 w-full">
+    <>
+      <DatePickerWithRange className="w-full md:w-auto" />
+      <SearchBar />
+      {role === 'teacher'
+        ? <DialogModal
+          triggerButtonText="New notice"
+          triggerButtonStyles="w-full md:w-auto"
+        >
+          <NoticeForm operationType="create" classroom={classroom!} />
+        </DialogModal> : null}
+    </>
+    // </div>
   )
-
 }
 
 export default NoticePage
