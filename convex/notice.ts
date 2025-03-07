@@ -43,9 +43,9 @@ export const createNotice = mutation({
   handler: async (ctx, args) => {
     return await createNoticeModel(
       ctx,
+      args.classroom,
       args.title,
       args.description,
-      args.classroom,
     );
   },
 });

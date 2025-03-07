@@ -1,4 +1,5 @@
 'use client'
+import { deleteNoticeAction } from "@/actions/notice/delete-action";
 import {
   AlertDialogAction,
   AlertDialogCancel,
@@ -7,27 +8,34 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog"
-import { deleteNotice } from "@/services/notice-service";
 import { NoticeDataModel } from "@/types/convex-type";
-import { useState, useTransition } from "react";
+import { useActionState, useEffect } from "react";
+import { toast } from "sonner";
 
 const DialogCard = ({ defaultData }: { defaultData: NoticeDataModel }) => {
-  const [error, setError] = useState<string | null>(null);
-  const [isPending, startTransition] = useTransition(); // Ensures UI remains interactive
 
-  const onConfirm = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setError(null); // Reset previous errors
+  const [state, formAction, isPending] = useActionState(deleteNoticeAction, {
+    feedback: { result: false, message: "" }
+  });
 
-    startTransition(async () => {
-      try {
-        await deleteNotice(defaultData._id); // Ensure deletion completes
-        // router.refresh(); // Refresh the list after successful deletion
-      } catch (err) {
-        setError(`Failed to delete notice. Please try again. ${err}`);
+  /**
+   * Prevent multiple toasts by using useEffect and judgement(message) to listen to the feedback state change
+   * useActionState triggers renders before the user confirms the action. 
+   * This is because it tracks the state changes that happen during the asynchronous operation (delete action) 
+   * and updates the state accordingly.It doesn't wait for the user to confirm.
+   */
+  useEffect(() => {
+    // useActionState trace the status
+    // Avoid empty toast coz the default message is empty, 
+    // it generates toast before conforming
+    if (state.feedback.message) {
+      if (state.feedback.result) {
+        toast.success(state.feedback.message);
+      } else {
+        toast.error(state.feedback.message);
       }
-    });
-  };
+    }
+  }, [state.feedback]);
 
   return (
     <>
@@ -39,11 +47,15 @@ const DialogCard = ({ defaultData }: { defaultData: NoticeDataModel }) => {
           This action cannot be undone. This will permanently remove the notice.
         </AlertDialogDescription>
       </AlertDialogHeader>
-      {error && <p className="text-red-500 text-sm">{error}</p>}
+      {!state.feedback.result && <p className="text-red-500 text-sm">{state.feedback.message}</p>}
       <AlertDialogFooter className="flex items-center justify-center gap-2">
         <AlertDialogCancel disabled={isPending}>Cancel</AlertDialogCancel>
-        <form onSubmit={onConfirm}>
-          <AlertDialogAction type="submit" disabled={isPending}>
+        <form
+          autoComplete="off"
+          action={formAction}
+        >
+          <input type="hidden" name="id" value={defaultData._id} />
+          <AlertDialogAction disabled={isPending}>
             {isPending ? "Deleting..." : "Confirm"}
           </AlertDialogAction>
         </form>

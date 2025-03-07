@@ -13,6 +13,7 @@ import { paginatedNotices } from "@/services/notice-service";
 import { ConvexTimeToDisplayFormat } from "@/utils/date-convertor";
 import UnAuthenticated from "@/components/UnAuthenticated";
 import { ClassroomEnum } from "@/constants/class-enum";
+import { ITEM_PER_PAGE } from "@/lib/settings";
 
 export const NoticePageContent = ({
   pageNum,
@@ -33,10 +34,11 @@ export const NoticePageContent = ({
   if (status === 'unAuthenticated') return <UnAuthenticated />;
 
   // Get total pages
-  const totalPages = Math.ceil(notices?.length ?? 0 / 10);
+  const totalPages = Math.ceil(notices.length / ITEM_PER_PAGE);
 
   // Get notice list by page number
   const noticesPerPage = paginatedNotices(notices).get(pageNum);
+  console.log('noticesPerPage', noticesPerPage);
 
   const renderRow = (item: NoticeDataModel) => {
     return (
@@ -95,7 +97,7 @@ export const NoticePageContent = ({
         <DashboardHeader />
       </div>
       {/* Function bar */}
-      <div className="flex flex-col md:flex-row md:justify-between items-start gap-4 w-full">
+      <div className="flex flex-col md:flex-row md:justify-between items-end gap-4 w-full">
         <DatePickerWithRange className="w-full md:w-auto" />
         <SearchBar />
         {role === 'teacher' ? <DialogModal

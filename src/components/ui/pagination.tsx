@@ -51,12 +51,15 @@ const PaginationLink = ({
   // Shadcnui PaginationPrevious component not support "disabled" action
   // So add <Button> into <PaginationLink>, and disable props to handle the disabled action
   // Same modification to PaginationNext component
+  // Apply scroll = false to avoid whole page scroll to top when click the pagination link
   < Button
     disabled={disable}
     variant={"ghost"}
     className="p-0 shadow-none"
   >
     <Link
+      scroll={false}
+      shallow={true}
       aria-current={isActive ? "page" : undefined}
       className={cn(
         buttonVariants({

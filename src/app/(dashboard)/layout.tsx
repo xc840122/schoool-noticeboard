@@ -10,13 +10,13 @@ export default function DashboardLayout({
 }) {
   return (
     <SidebarProvider >
-      <div className="flex w-screen">
-        <AppSidebar />
-        <SidebarInset className="flex flex-col flex-1">
-          <main>{children}</main>
-          <Toaster />
-        </SidebarInset>
-      </div>
+      {/* <div className="flex w-screen"> */}
+      <AppSidebar />
+      <SidebarInset>
+        <main>{children}</main>
+        <Toaster />
+      </SidebarInset>
+      {/* </div> */}
     </SidebarProvider>
   );
 }
