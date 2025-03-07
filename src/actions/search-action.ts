@@ -17,8 +17,8 @@ const searchAction = (prevSate: FormState, formData: FormData) => {
     feedback.message = NOTICE_MESSAGES.ERROR.INVALID_SEARTCH_INPUT;
   } else {
     // Set the feedback message to be search value
-    feedback.result = true;
-    feedback.message = value;
+    // feedback.result = true;
+    // feedback.message = value;
     redirect(`?search=${encodeURIComponent(value)}&page=1`);
   }
   return { feedback };

@@ -4,16 +4,14 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { X } from "lucide-react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useActionState, useEffect, useState } from "react";
+import { useActionState } from "react";
+// import { useActionState, useEffect, useState } from "react";
 
 const SearchBar = () => {
 
   const router = useRouter();
   const path = usePathname();
   const searchParams = useSearchParams();
-  const [error, setError] = useState<string | null>(null);
-
-  // const [error, setError] = useState<string | null>(null);
 
   const [state, formAction, isPending] = useActionState(searchAction,
     { feedback: { result: false, message: "" } });
@@ -25,38 +23,9 @@ const SearchBar = () => {
     router.push(`${path}?${params.toString()}`, { scroll: false });
   };
 
-  // // Handle the search action
-  // const searchHandler = (e: React.FormEvent<HTMLFormElement>) => {
-  //   e.preventDefault() // Prevent default form submission (page reload)
-  //   // Get the input value
-  //   const value = (e.currentTarget.elements.namedItem('search') as HTMLInputElement).value;
-  //   // Validate the input
-  //   const result = searchInputSchema.safeParse({ keyword: value });
-  //   if (value && !result.success) {
-  //     // setError("Please input valid characters,suport a-z,A-Z,0-9");
-  //     return;
-  //   }
-
-  // Create a new URLSearchParams instance to clear existing parameters
-  // const params = new URLSearchParams();
-
-  // if (state.feedback.result) {
-  //   // Set the search query parameter
-  //   params.set("search", state.feedback.message.toString());
-  //   // Reset page number 1 after triggering search
-  //   params.set("page", "1");
-  //   // Update the URL with search query
-  //   router.push(`${path}?${params.toString()}`, { scroll: false });
-  // }
-
-  useEffect(() => {
-    // useActionState trace the status
-    // Avoid empty toast coz the default message is empty, 
-    // it generates toast before conforming
-    if (!state.feedback.result && state.feedback.message) {
-      setError(state.feedback.message);
-    }
-  }, [state.feedback]);
+  // Display error message if any
+  const error = (!state.feedback.result && state.feedback.message)
+    ? state.feedback.message : null;
 
   return (
     <form
