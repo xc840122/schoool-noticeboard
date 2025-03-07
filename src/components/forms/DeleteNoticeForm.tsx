@@ -2,7 +2,6 @@
 
 import deleteNoticeAction from "@/actions/delete-action";
 import {
-  AlertDialogAction,
   AlertDialogCancel,
   AlertDialogDescription,
   AlertDialogFooter,
