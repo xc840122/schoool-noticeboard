@@ -8,7 +8,7 @@ import type { Feedback, FormState } from "@/types/action-type";
  * @param formData
  *  
  * */
-export const deleteNoticeAction = async (prevState: FormState, formData: FormData) => {
+const deleteNoticeAction = async (prevState: FormState, formData: FormData) => {
   try {
     // Initial the feedback
     const feedback: Feedback = { result: false, message: "" };
@@ -31,3 +31,5 @@ export const deleteNoticeAction = async (prevState: FormState, formData: FormDat
     throw new Error("Delete notice failed");
   }
 };
+
+export default deleteNoticeAction;

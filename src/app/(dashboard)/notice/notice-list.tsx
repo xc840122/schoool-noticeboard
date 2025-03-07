@@ -1,5 +1,5 @@
 import { DatePickerWithRange } from "@/components/DatePickerWithRange";
-import DialogCard from "@/components/DialogCard";
+import DialogCard from "@/components/forms/DeleteNoticeForm";
 import DialogModal from "@/components/DialogModal";
 import Pagination from "@/components/Pagination";
 import SearchBar from "@/components/forms/SearchBarForm";
@@ -37,7 +37,6 @@ export const NoticeListContent = ({
 
   // Get notice list by page number
   const noticesPerPage = paginatedNotices(notices).get(pageNum);
-  console.log('noticesPerPage', noticesPerPage);
 
   const renderRow = (item: NoticeDataModel) => {
     return (
