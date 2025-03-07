@@ -1,5 +1,6 @@
 // app/dashboard/layout.tsx
 import { AppSidebar } from "@/components/app-sidebar";
+import DashboardHeader from "@/components/DashboardHeader";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { Toaster } from "@/components/ui/sonner";
 
@@ -13,7 +14,10 @@ export default function DashboardLayout({
       {/* <div className="flex w-screen"> */}
       <AppSidebar />
       <SidebarInset>
-        <main>{children}</main>
+        <main>
+          <DashboardHeader />
+          {children}
+        </main>
         <Toaster />
       </SidebarInset>
       {/* </div> */}

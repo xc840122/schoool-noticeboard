@@ -1,4 +1,3 @@
-import DashboardHeader from "@/components/DashboardHeader"
 import { DatePickerWithRange } from "@/components/DatePickerWithRange";
 import DialogCard from "@/components/DialogCard";
 import DialogModal from "@/components/DialogModal";
@@ -92,10 +91,6 @@ export const NoticePageContent = ({
 
   return (
     <div className="flex flex-col container mx-auto max-w-5xl items-center gap-4 p-2">
-      {/* Top, breadcrumbs */}
-      <div className="w-full">
-        <DashboardHeader />
-      </div>
       {/* Function bar */}
       <div className="flex flex-col md:flex-row md:justify-between items-end gap-4 w-full">
         <DatePickerWithRange className="w-full md:w-auto" />
