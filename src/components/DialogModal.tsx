@@ -8,7 +8,7 @@ import { Button } from "./ui/button"
 import { ReactElement, useState } from "react";
 import React from "react";
 import Link from "next/link";
-import { X } from "lucide-react";
+import { Pencil, Trash2, X } from "lucide-react";
 
 interface ModalProps {
   triggerButtonText: string;
@@ -27,9 +27,13 @@ const DialogModal = ({
   return (
     <AlertDialog open={isOpen} onOpenChange={setIsOpen}>
       <AlertDialogTrigger asChild>
-        <Button className={triggerButtonStyles}>
-          {triggerButtonText}
-        </Button>
+        {triggerButtonText === 'Delete'
+          ? <Trash2 color="#7b39ed" />
+          : triggerButtonText === 'Edit'
+            ? <Pencil color="#7b39ed" />
+            : (<Button className={triggerButtonStyles}>
+              {triggerButtonText}
+            </Button>)}
       </AlertDialogTrigger>
       <AlertDialogContent>
         {children && React.isValidElement(children)
