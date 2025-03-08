@@ -19,13 +19,15 @@ export const NoticeListContent = ({
   status,
   role,
   notices,
-  classroom
+  classroom,
+  mode = 'desktop',
 }: {
   pageNum: number,
   status: 'loading' | 'unAuthenticated' | 'authenticated',
   role: 'student' | 'teacher',
   classroom: ClassroomEnum,
   notices: NoticeDataModel[] | undefined
+  mode?: string
 }) => {
 
   // Handle the Loading, unAuthenticated
@@ -35,8 +37,12 @@ export const NoticeListContent = ({
   // Get total pages
   const totalPages = Math.ceil(notices.length / ITEM_PER_PAGE);
 
-  // Get notice list by page number
-  const noticesPerPage = paginatedNotices(notices).get(pageNum);
+  // Get notice list by page number (big screen (ItemPerPage) or little screen (pageNum*ItemPerPage))
+  const noticesPerPage = mode !== 'mobile'
+    ? paginatedNotices(notices).get(pageNum)
+    : notices.slice(0, pageNum * ITEM_PER_PAGE);
+
+  console.log('noticesPerPage', noticesPerPage);
 
   const renderRow = (item: NoticeDataModel) => {
     return (
