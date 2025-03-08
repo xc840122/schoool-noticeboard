@@ -16,12 +16,12 @@ const NoticeListWrapper = () => {
   const notices = useQuery(
     api.notice.getNotices,
     {
-      classroom: classroom ?? '',
+      classroom: classroom,
       keyword: searchValue,
       startDate: DateToConvexTime(startDate),
       endDate: DateToConvexTime(endDate)
     }
-  );
+  ) ?? [];
 
   return (
     <NoticeListContent
@@ -30,7 +30,7 @@ const NoticeListWrapper = () => {
       status={status}
       role={role}
       notices={notices}
-      classroom={classroom!}
+      classroom={classroom}
     />
   )
 }

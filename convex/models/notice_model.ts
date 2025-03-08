@@ -33,16 +33,16 @@ export const getNoticesModel = async (
         .withSearchIndex("search_title", q =>
           q
             .search("title", validKeyword)
-            .eq("class", classroom)
+            .eq("classroom", classroom)
         )
         .collect();
       return notices.sort((a, b) => b._creationTime - a._creationTime);
     } else if (startDate && endDate) {
       return await ctx.db
         .query("notices")
-        .withIndex("by_class", q =>
+        .withIndex("by_classroom", q =>
           q
-            .eq("class", classroom)
+            .eq("classroom", classroom)
             .gte("_creationTime", startDate)
             .lte("_creationTime", endDate)
         )
@@ -51,7 +51,7 @@ export const getNoticesModel = async (
     } else {
       return await ctx.db
         .query("notices")
-        .withIndex("by_class", q => q.eq("class", classroom))
+        .withIndex("by_classroom", q => q.eq("classroom", classroom))
         .order("desc")
         .collect();
     }
@@ -60,6 +60,25 @@ export const getNoticesModel = async (
     throw new Error("Query failed");
   }
 };
+
+/**
+ * Get notice by id
+ * @param _id
+ * @returns 
+ */
+export const getNoticeByIdModel = async (
+  ctx: QueryCtx,
+  _id: Id<'notices'>) => {
+  try {
+    if (!_id) {
+      throw new Error(`Invalid input: ${_id}`);
+    }
+    return await ctx.db.get(_id);
+  } catch (error) {
+    console.error("Failed to get notice by id:", error);
+    throw new Error("Query failed");
+  }
+}
 
 /**
  * Create a new notice
@@ -78,7 +97,7 @@ export const createNoticeModel = async (
       throw new Error(`Invalid input: ${classroom}, ${title}, ${description}`);
     }
     return await ctx.db.insert("notices", {
-      class: classroom,
+      classroom: classroom,
       title: title,
       description: description,
     });

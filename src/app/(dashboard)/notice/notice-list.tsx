@@ -13,6 +13,7 @@ import { ConvexTimeToDisplayFormat } from "@/utils/date-convertor";
 import { ClassroomEnum } from "@/constants/class-enum";
 import { ITEM_PER_PAGE } from "@/lib/settings";
 import { SignIn } from "@clerk/nextjs";
+import { redirect } from "next/navigation";
 
 export const NoticeListContent = ({
   pageNum,
@@ -26,7 +27,7 @@ export const NoticeListContent = ({
   status: 'loading' | 'unAuthenticated' | 'authenticated',
   role: 'student' | 'teacher',
   classroom: ClassroomEnum,
-  notices: NoticeDataModel[] | undefined
+  notices: NoticeDataModel[],
   mode?: string
 }) => {
 
@@ -38,17 +39,23 @@ export const NoticeListContent = ({
   const totalPages = Math.ceil(notices.length / ITEM_PER_PAGE);
 
   // Get notice list by page number (big screen (ItemPerPage) or little screen (pageNum*ItemPerPage))
-  const noticesPerPage = mode !== 'mobile'
-    ? paginatedNotices(notices).get(pageNum)
-    : notices.slice(0, pageNum * ITEM_PER_PAGE);
+  const noticesPerPage: NoticeDataModel[] = mode !== 'mobile'
+    ? (paginatedNotices(notices).get(pageNum)) ?? []
+    : (notices.slice(0, pageNum * ITEM_PER_PAGE)) ?? [];
 
-  console.log('noticesPerPage', noticesPerPage);
+  // Show detail of the selected row
+  const onNoticeClick = (item: NoticeDataModel) => {
+    redirect(`/notice/${item._id}`);
+  }
 
   const renderRow = (item: NoticeDataModel) => {
     return (
       <TableRow
-        className="cursor-pointer hover:bg-gray-100 p-2 rounded-md transition"
+        className="cursor-pointer hover:bg-gray-200 hover:scale-105
+         active:bg-gray-300 p-2 rounded-md transition-all duration-200 
+         shadow-sm hover:shadow-md"
         key={item._id}
+        onClick={() => onNoticeClick(item)}
       >
         <TableCell className="font-medium">{item.title}</TableCell>
         <TableCell>{item.description}</TableCell>
@@ -58,14 +65,10 @@ export const NoticeListContent = ({
           <div className="flex gap-2">
             {/* Delete button and dialog */}
             <DialogModal triggerButtonText="Delete">
-              <DialogCard
-                defaultData={item}
-              />
+              <DialogCard defaultData={item} />
             </DialogModal>
             {/* Edit button and dialog */}
-            <DialogModal
-              triggerButtonText="Edit"
-            >
+            <DialogModal triggerButtonText="Edit">
               <NoticeForm operationType="edit" classroom={classroom} defaultData={item} />
             </DialogModal>
           </div>

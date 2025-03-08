@@ -13,13 +13,12 @@ import {
   FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-import { AlertDialogTitle } from "../ui/alert-dialog"
+import { AlertDialogCancel, AlertDialogTitle } from "../ui/alert-dialog"
 import { NoticeDataModel } from "@/types/convex-type"
 import { NoticeCreationType, noticeCreationSchema } from "@/validators/notice-validator"
 import { createNotice, updateNotice } from "@/services/notice-service"
 import { ClassroomEnum } from "@/constants/class-enum"
 import { toast } from "sonner"
-import { NOTICE_MESSAGES } from "@/constants/messages/notice-message"
 
 
 const NoticeForm = ({
@@ -53,10 +52,10 @@ const NoticeForm = ({
         const response = await createNotice(classroom, values.title, values.description);
         // Show toast message
         if (response.result) {
-          toast.success(NOTICE_MESSAGES.SUCCESS.CREATE_NOTICE_SUCCESSFUL)
+          toast.success(response.message)
         }
         else {
-          toast.error(NOTICE_MESSAGES.ERROR.CREATE_NOTICE_FAILED);
+          toast.error(response.message);
         }
         break;
       case 'edit':
@@ -64,10 +63,10 @@ const NoticeForm = ({
           const response = await updateNotice(defaultData._id, values.title, values.description);
           // Show toast message
           if (response.result) {
-            toast.success(NOTICE_MESSAGES.SUCCESS.UPDATE_NOTICE_SUCCESSFUL)
+            toast.success(response.message)
           }
           else {
-            toast.error(NOTICE_MESSAGES.ERROR.UPDATE_NOTICE_FAILED);
+            toast.error(response.message);
           }
         }
         break;
@@ -121,6 +120,11 @@ const NoticeForm = ({
             </FormItem>
           )}
         />
+        <AlertDialogCancel
+          className="mr-2"
+          disabled={form.formState.isLoading}>
+          Cancel
+        </AlertDialogCancel>
         <Button type="submit">Submit</Button>
       </form>
     </Form>

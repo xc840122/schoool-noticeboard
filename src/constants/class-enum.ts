@@ -2,6 +2,7 @@
  * Enum for classroom
  */
 export enum ClassroomEnum {
+  None = "None",
   Year1A = "1A",
   Year1B = "1B",
   Year2A = "2A",
