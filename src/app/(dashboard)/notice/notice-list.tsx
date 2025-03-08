@@ -52,27 +52,28 @@ export const NoticeListContent = ({
     return (
       <TableRow
         className="cursor-pointer hover:bg-gray-200 hover:scale-105
-         active:bg-gray-300 p-2 rounded-md transition-all duration-200 
-         shadow-sm hover:shadow-md"
+         active:bg-gray-300 rounded-md transition-all duration-200 
+         shadow-sm hover:shadow-md text-center"
         key={item._id}
         onClick={() => onNoticeClick(item)}
       >
-        <TableCell className="font-medium">{item.title}</TableCell>
-        <TableCell>{item.description}</TableCell>
-        <TableCell>{ConvexTimeToDisplayFormat(item._creationTime)}</TableCell>
-        {role === 'teacher' ? <TableCell>
-          {/* Bind FormModal to buttons*/}
-          <div className="flex gap-2">
-            {/* Delete button and dialog */}
-            <DialogModal triggerButtonText="Delete">
-              <DialogCard defaultData={item} />
-            </DialogModal>
-            {/* Edit button and dialog */}
-            <DialogModal triggerButtonText="Edit">
-              <NoticeForm operationType="edit" classroom={classroom} defaultData={item} />
-            </DialogModal>
-          </div>
-        </TableCell> : null}
+        <TableCell className="font-medium w-3/12 truncate">{item.title}</TableCell>
+        <TableCell className="w-6/12 truncate">{item.description}</TableCell>
+        <TableCell className="w-2/12">{ConvexTimeToDisplayFormat(item._creationTime)}</TableCell>
+        {role === 'teacher'
+          ? <TableCell className="w-1/12">
+            {/* Bind FormModal to buttons*/}
+            <div className="flex justify-center gap-2">
+              {/* Delete button and dialog */}
+              <DialogModal triggerButtonText="Delete">
+                <DialogCard defaultData={item} />
+              </DialogModal>
+              {/* Edit button and dialog */}
+              <DialogModal triggerButtonText="Edit">
+                <NoticeForm operationType="edit" classroom={classroom} defaultData={item} />
+              </DialogModal>
+            </div>
+          </TableCell> : null}
       </TableRow>
     )
   }
@@ -113,7 +114,10 @@ export const NoticeListContent = ({
       {/* Table content */}
       <div className="w-full bg-gray-50 p-4 rounded-lg">
         {/* [] to avoid crash */}
-        <Table columns={columns} renderRow={renderRow} data={noticesPerPage ?? []} />
+        <Table
+          columns={columns}
+          renderRow={renderRow}
+          data={noticesPerPage ?? []} />
         <Pagination currentPage={pageNum} totalPages={totalPages} />
       </div>
     </div>

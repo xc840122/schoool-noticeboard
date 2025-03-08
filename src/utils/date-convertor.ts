@@ -7,8 +7,8 @@
 export const ConvexTimeToDisplayFormat = (creationTime: number) => {
   const date = new Date(creationTime);
   return date.toLocaleDateString('en-NZ', {
-    year: 'numeric',
-    month: 'long',
+    year: '2-digit',
+    month: '2-digit',
     day: '2-digit',
   });
 }

@@ -22,12 +22,16 @@ const TableView = <T,>({
   }) => {
 
   return (
-    <Table>
+    <Table className="table-fixed">
       <TableCaption>A list of your recent messages.</TableCaption>
       <TableHeader>
         <TableRow>
           {columns.map((column) => (
-            <TableHead key={column.accessor}>{column.header}</TableHead>
+            <TableHead
+              className="text-center"
+              key={column.accessor}
+            >{column.header}
+            </TableHead>
           ))}
         </TableRow>
       </TableHeader>
