@@ -1,5 +1,4 @@
 import { DatePickerWithRange } from "@/components/DatePickerWithRange";
-import DialogCard from "@/components/forms/DeleteNoticeForm";
 import DialogModal from "@/components/DialogModal";
 import Pagination from "@/components/Pagination";
 import SearchBar from "@/components/forms/SearchBarForm";
@@ -13,7 +12,9 @@ import { ConvexTimeToDisplayFormat } from "@/utils/date-convertor";
 import { ClassroomEnum } from "@/constants/class-enum";
 import { ITEM_PER_PAGE } from "@/lib/settings";
 import { SignIn } from "@clerk/nextjs";
-import { redirect } from "next/navigation";
+import DeleteNoticeForm from "@/components/forms/DeleteNoticeForm";
+import { Rows3 } from "lucide-react";
+import Link from "next/link";
 
 export const NoticeListContent = ({
   pageNum,
@@ -30,7 +31,6 @@ export const NoticeListContent = ({
   notices: NoticeDataModel[],
   mode?: string
 }) => {
-
   // Handle the Loading, unAuthenticated
   if (!notices) return <Loading />;
   if (status === 'unAuthenticated') return <SignIn />;
@@ -43,37 +43,34 @@ export const NoticeListContent = ({
     ? (paginatedNotices(notices).get(pageNum)) ?? []
     : (notices.slice(0, pageNum * ITEM_PER_PAGE)) ?? [];
 
-  // Show detail of the selected row
-  const onNoticeClick = (item: NoticeDataModel) => {
-    redirect(`/notice/${item._id}`);
-  }
-
   const renderRow = (item: NoticeDataModel) => {
     return (
       <TableRow
-        className="cursor-pointer hover:bg-gray-200 hover:scale-105
+        className="cursor-pointer hover:bg-gray-200
          active:bg-gray-300 rounded-md transition-all duration-200 
          shadow-sm hover:shadow-md text-center"
         key={item._id}
-        onClick={() => onNoticeClick(item)}
       >
         <TableCell className="font-medium w-3/12 truncate">{item.title}</TableCell>
         <TableCell className="w-6/12 truncate">{item.description}</TableCell>
         <TableCell className="w-2/12">{ConvexTimeToDisplayFormat(item._creationTime)}</TableCell>
-        {role === 'teacher'
-          ? <TableCell className="w-1/12">
-            {/* Bind FormModal to buttons*/}
-            <div className="flex justify-center gap-2">
-              {/* Delete button and dialog */}
-              <DialogModal triggerButtonText="Delete">
-                <DialogCard defaultData={item} />
-              </DialogModal>
-              {/* Edit button and dialog */}
-              <DialogModal triggerButtonText="Edit">
-                <NoticeForm operationType="edit" classroom={classroom} defaultData={item} />
-              </DialogModal>
-            </div>
-          </TableCell> : null}
+        <TableCell className="w-1/12">
+          {/* Bind FormModal to buttons*/}
+          <div className="flex justify-center gap-2">
+            <Link href={`/notice/${item._id}`}>
+              <Rows3 color="#7b39ed" />
+            </Link>
+            {/* Delete button and dialog */}
+            {role === 'teacher'
+              ? <DialogModal triggerButtonText="Delete">
+                <DeleteNoticeForm defaultData={item} />
+              </DialogModal> : null}
+            {/* Edit button and dialog */}
+            {role === 'teacher' ? <DialogModal triggerButtonText="Edit">
+              <NoticeForm operationType="edit" classroom={classroom} defaultData={item} />
+            </DialogModal> : null}
+          </div>
+        </TableCell>
       </TableRow>
     )
   }
@@ -125,123 +122,3 @@ export const NoticeListContent = ({
 }
 
 export default NoticeListContent
-
-
-/**
- * This is the SSR page which is not apply convex subscription features to update data
- * It uses feathQuery to fetch data and display it(Beta SSR feature of Convex,without data subscription)
- * It applies traditional way by router.refresh() to update data
- */
-
-// import { getnoticeList, getnoticeListWithPage } from "@/app/business/noticeBusiness";
-// import DashboardHeader from "@/components/DashboardHeader"
-// import { DatePickerWithRange } from "@/components/DatePickerWithRange";
-// import DialogCard from "@/components/DialogCard";
-// import DialogModal from "@/components/DialogModal";
-// import noticeForm from "@/components/forms/noticeForm";
-// import Pagination from "@/components/Pagination";
-// import SearchBar from "@/components/SearchBar";
-// import Table from "@/components/Table";
-// import { TableCell, TableRow } from "@/components/ui/table";
-// import { PaginatedData } from "@/types/commonType";
-// import { noticeItem } from "@/types/noticeType";
-
-
-// export const classroom = '3A';
-
-// const columns = [
-//   {
-//     header: 'Title',
-//     accessor: 'title',
-//   },
-//   {
-//     header: 'Description',
-//     accessor: 'description',
-//   },
-//   {
-//     header: 'Time',
-//     accessor: 'time',
-//   },
-//   {
-//     header: 'Actions',
-//     accessor: 'action',
-//   }
-// ];
-
-// const renderRow = (item: noticeItem) => {
-//   return (
-//     <TableRow
-//       className="cursor-pointer hover:bg-gray-100 p-2 rounded-md transition"
-//       key={item.id}
-//     >
-//       <TableCell className="font-medium">{item.title}</TableCell>
-//       <TableCell>{item.description}</TableCell>
-//       <TableCell>{item.time?.toString()}</TableCell>
-//       <TableCell>
-//         {/* Bind FormModal to buttons*/}
-//         <div className="flex gap-2">
-//           {/* Delete button and dialog */}
-//           <DialogModal triggerButtonText="Delete">
-//             <DialogCard
-//               defaultData={item}
-//             />
-//           </DialogModal>
-//           {/* Edit button and dialog */}
-//           <DialogModal
-//             triggerButtonText="Edit"
-//           >
-//             <noticeForm operationType="edit" defaultData={item} />
-//           </DialogModal>
-//         </div>
-//       </TableCell >
-//     </TableRow >
-//   )
-// }
-
-// const noticePage = async ({ searchParams }: {
-//   searchParams: { page?: string, search?: string }
-// }) => {
-//   // Extract page from url, defaulting to '1' if missing
-//   const { page } = await searchParams;
-//   const pageNum = parseInt(page ?? '1');
-
-//   const { search } = await searchParams;
-//   const searchValue = (search ?? '').trim();
-
-//   // Get notice map
-//   const noticeList = await getnoticeList(classroom, searchValue);
-//   const noticesWithPageInfo = await getnoticeListWithPage(noticeList as PaginatedData<noticeItem>[]);
-
-//   // Get notice list by page number
-//   const noticesPerPage = noticesWithPageInfo.get(pageNum) ?? [];
-
-//   //  Get total page number
-//   const totalPages = noticesWithPageInfo.size;
-
-//   return (
-//     <div className="flex flex-col container mx-auto max-w-5xl items-center gap-4 p-2">
-//       {/* Top, breadcrumbs */}
-//       <div className="w-full">
-//         <DashboardHeader />
-//       </div>
-//       {/* Function bar */}
-//       <div className="flex flex-col md:flex-row md:justify-between items-start gap-4 w-full">
-//         <DatePickerWithRange className="w-full md:w-auto" />
-//         <SearchBar />
-//         <DialogModal
-//           triggerButtonText="New notice"
-//           triggerButtonStyles="w-full md:w-auto"
-//         >
-//           <noticeForm operationType="create" />
-//         </DialogModal>
-//       </div>
-//       {/* Table content */}
-//       <div className="w-full bg-gray-50 p-4 rounded-lg">
-//         <Table columns={columns} renderRow={renderRow} data={noticesPerPage} />
-//         <Pagination currentPage={pageNum} totalPages={totalPages} />
-//       </div>
-//     </div>
-//   )
-// }
-
-// export default noticePage

@@ -10,7 +10,7 @@ import React from "react";
 import { Pencil, Trash2 } from "lucide-react";
 
 interface ModalProps {
-  triggerButtonText: string;
+  triggerButtonText?: string;
   triggerButtonStyles?: string;
   children: ReactElement<{ onClose?: () => void }>;
 }
@@ -22,19 +22,20 @@ const DialogModal = ({
 }: ModalProps) => {
 
   const [isOpen, setIsOpen] = useState(false);
-  console.log('isOpen', isOpen)
+
   return (
     <AlertDialog open={isOpen} onOpenChange={setIsOpen}>
-      {triggerButtonText !== 'View'
-        ? <AlertDialogTrigger asChild>
-          {triggerButtonText === 'Delete'
-            ? <Trash2 color="#7b39ed" />
-            : triggerButtonText === 'Edit'
-              ? <Pencil color="#7b39ed" />
-              : (<Button className={triggerButtonStyles}>
-                {triggerButtonText}
-              </Button>)}
-        </AlertDialogTrigger> : null}
+      {/* Button type of trigger */}
+      {<AlertDialogTrigger asChild>
+        {triggerButtonText === 'Delete'
+          ? <Trash2 color="#7b39ed" />
+          : triggerButtonText === 'Edit'
+            ? <Pencil color="#7b39ed" />
+            : (<Button className={triggerButtonStyles}>
+              {triggerButtonText}
+            </Button>)}
+      </AlertDialogTrigger>}
+      {/* Modal content */}
       <AlertDialogContent>
         {children && React.isValidElement(children)
           ? React.cloneElement(children, { onClose: () => setIsOpen(false) })
