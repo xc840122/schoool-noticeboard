@@ -1,7 +1,5 @@
 const Default = async () => {
-  return (
-    <div>default</div>
-  )
+  return null
 }
 
 export default Default
