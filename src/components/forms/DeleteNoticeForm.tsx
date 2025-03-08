@@ -13,7 +13,11 @@ import { useActionState, useEffect } from "react";
 import { toast } from "sonner";
 import { Button } from "../ui/button";
 
-const DeleteNoticeForm = ({ defaultData }: { defaultData: NoticeDataModel }) => {
+const DeleteNoticeForm = ({
+  defaultData,
+}: {
+  defaultData: NoticeDataModel,
+}) => {
 
   const [state, formAction, isPending] = useActionState(deleteNoticeAction, {
     feedback: { result: false, message: "" }

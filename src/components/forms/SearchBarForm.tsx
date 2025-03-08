@@ -20,7 +20,7 @@ const SearchBar = () => {
   const clearSearch = () => {
     const params = new URLSearchParams(searchParams.toString());
     params.delete("search");
-    router.push(`${path}?${params.toString()}`, { scroll: false });
+    router.replace(`${path}?${params.toString()}`, { scroll: false });
   };
 
   // Display error message if any

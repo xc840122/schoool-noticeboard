@@ -8,9 +8,14 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination"
 import { MAX_DISPLAY_PAGE_NUMBER } from "@/lib/settings";
-import { usePathname, useSearchParams } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 
+/**
+ * Apply different view according to screen size
+ * @param param0 
+ * @returns 
+ */
 const PaginationView = ({
   currentPage,
   totalPages
@@ -22,14 +27,30 @@ const PaginationView = ({
   // Handle the change of the pagination
   const path = usePathname();
   const searchParams = useSearchParams();
+  const router = useRouter();
 
   const onPageChange = (page: number) => {
     // Create a new URLSearchParams instance to preserve existing parameters
     const params = new URLSearchParams(searchParams.toString());
+    // Control the display of list
+    params.set("mode", "desktop");
     // Update or set the `page` parameter
     params.set("page", page.toString());
     // Return the new URL with the updated parameters
     return `${path}?${params.toString()}`;
+  }
+
+  const onClickLoadMore = () => {
+    const params = new URLSearchParams(searchParams.toString());
+    // Load next page once the button is clicked
+    params.set("page", (currentPage + 1).toString());
+    // Control the display of list
+    params.set("mode", "mobile");
+    // Handle the last page
+    if (currentPage === totalPages) {
+      return null;
+    }
+    router.push(`${path}?${params.toString()}`, { scroll: false });
   }
 
   /**
@@ -59,8 +80,14 @@ const PaginationView = ({
   return (
     <Pagination>
       <PaginationContent>
+        <PaginationItem
+          onClick={onClickLoadMore}
+          className={`grid place-items-center md:hidden w-screen mx-4 mt-2 rounded-md shadow-md h-10
+           bg-slate-400 hover:bg-slate-500 text-white font-semibold py-1 cursor-pointer ${currentPage === totalPages ? "hidden" : ""}`}>
+          Load More
+        </PaginationItem>
         {/* Previous button, modify the default shadcnui component for disable feature */}
-        <PaginationItem>
+        <PaginationItem className="hidden md:block">
           <PaginationPrevious
             disable={currentPage === 1 || totalPages === 0}
             href={onPageChange(currentPage > 1 ? currentPage - 1 : 1)}
@@ -70,7 +97,7 @@ const PaginationView = ({
         {pageDisplayNumbers(totalPages, currentPage)
           .map((pageNumber) => {
             return (
-              <PaginationItem key={pageNumber}>
+              <PaginationItem key={pageNumber} className="hidden md:block">
                 <PaginationLink
                   isActive={currentPage === pageNumber}
                   href={onPageChange(pageNumber)}
@@ -81,7 +108,7 @@ const PaginationView = ({
             )
           })}
         {/* Next button, modify the default shadcnui component for disable feature */}
-        <PaginationItem>
+        <PaginationItem className="hidden md:block">
           <PaginationNext
             disable={currentPage === totalPages || totalPages === 0}
             href={onPageChange(currentPage < totalPages ? currentPage + 1 : totalPages)}

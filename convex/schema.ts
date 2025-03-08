@@ -7,20 +7,20 @@ import { v } from "convex/values";
 export default defineSchema({
   // Message schema
   notices: defineTable({
-    class: v.string(),
+    classroom: v.string(),
     title: v.string(),
     description: v.string(),
   })
-    .index("by_class", ["class"]) // Index for filtering by class
+    .index("by_classroom", ["classroom"]) // Index for filtering by class
     .searchIndex("search_title", {
       searchField: "title",
-      filterFields: ["class"]
+      filterFields: ["classroom"]
     }),
 
   // Verification schema
   verification_info: defineTable({
     code: v.string(), // Verification code
-    class: v.string(),// Class code
+    classroom: v.string(),// Class code
     role: v.string(), // Role of the user (student, teacher, etc.)
     isValid: v.boolean(),//false if code is used
   })

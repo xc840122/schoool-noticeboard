@@ -36,7 +36,7 @@ export const signUpCodeVerificationRepo = async (code: string, classroom: string
 //       api.auth.getVerificationInfo,
 //       { code: code }
 //     );
-//     console.log(`Verification info: ${verificationInfo}`);
+
 //     // If no verification information is found, log an error and return null
 //     if (!verificationInfo) {
 //       console.error(`No verification information found from db: ${code}`);

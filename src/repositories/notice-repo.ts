@@ -2,7 +2,7 @@
  * Notice data layer
  * 
  */
-import { fetchMutation } from "convex/nextjs";
+import { fetchMutation, fetchQuery } from "convex/nextjs";
 import { api } from "../../convex/_generated/api";
 import { Id } from "../../convex/_generated/dataModel";
 
@@ -26,6 +26,18 @@ import { Id } from "../../convex/_generated/dataModel";
 //   }
 // }
 
+export const getNoticeByIdRepo = async (id: string) => {
+  try {
+    const notice = await fetchQuery(
+      api.notice.getNoticeById,
+      { _id: id as Id<"notices"> }
+    );
+    return notice;
+  } catch (error) {
+    console.error(`Failed to get notice by id: ${error}`);
+    throw new Error("Get notice by id failed");
+  }
+}
 
 export const createNoticeRepo = async (classroom: string, title: string, description: string): Promise<Id<"notices">> => {
   try {

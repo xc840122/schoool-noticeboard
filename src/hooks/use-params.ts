@@ -20,5 +20,8 @@ export const useURLParams = () => {
   const startDate = searchParams.get('start') ?? '';
   const endDate = searchParams.get('end') ?? '';
 
-  return { pageNum, searchValue, startDate, endDate };
+  // Get load more,for little screen device
+  const mode = searchParams.get('mode') ?? '';
+
+  return { pageNum, searchValue, startDate, endDate, mode };
 };

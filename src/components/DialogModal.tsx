@@ -7,11 +7,10 @@ import {
 import { Button } from "./ui/button"
 import { ReactElement, useState } from "react";
 import React from "react";
-import Link from "next/link";
-import { X } from "lucide-react";
+import { Pencil, Trash2 } from "lucide-react";
 
 interface ModalProps {
-  triggerButtonText: string;
+  triggerButtonText?: string;
   triggerButtonStyles?: string;
   children: ReactElement<{ onClose?: () => void }>;
 }
@@ -26,21 +25,22 @@ const DialogModal = ({
 
   return (
     <AlertDialog open={isOpen} onOpenChange={setIsOpen}>
-      <AlertDialogTrigger asChild>
-        <Button className={triggerButtonStyles}>
-          {triggerButtonText}
-        </Button>
-      </AlertDialogTrigger>
+      {/* Button type of trigger */}
+      {<AlertDialogTrigger asChild>
+        {triggerButtonText === 'Delete'
+          ? <Trash2 color="#7b39ed" />
+          : triggerButtonText === 'Edit'
+            ? <Pencil color="#7b39ed" />
+            : (<Button className={triggerButtonStyles}>
+              {triggerButtonText}
+            </Button>)}
+      </AlertDialogTrigger>}
+      {/* Modal content */}
       <AlertDialogContent>
         {children && React.isValidElement(children)
           ? React.cloneElement(children, { onClose: () => setIsOpen(false) })
           : children}
         <div className="absolute top-4 right-4 cursor-pointer">
-          <Link href="/" passHref>
-            <Button aria-label="Close" variant='ghost' className="hover:opacity-70 transition-opacity duration-200">
-              <X className="text-gray-600" onClick={() => setIsOpen(false)} />
-            </Button>
-          </Link>
         </div>
       </AlertDialogContent>
     </AlertDialog>

@@ -1,7 +1,7 @@
 // db operation of notices
 import { mutation, query } from "./_generated/server";
 import { v } from "convex/values";
-import { createNoticeModel, deleteNoticeModel, getNoticesModel, updateNoticeModel } from "./models/notice_model";
+import { createNoticeModel, deleteNoticeModel, getNoticeByIdModel, getNoticesModel, updateNoticeModel } from "./models/notice_model";
 
 /**
  * Get notice list by class name from database
@@ -29,6 +29,18 @@ export const getNotices = query({
       args.endDate
     );
   },
+});
+
+/**
+ * Get notice by id
+ * @param _id
+ * @returns 
+ */
+export const getNoticeById = query({
+  args: { _id: v.id("notices") },
+  handler: async (ctx, args) => {
+    return await getNoticeByIdModel(ctx, args._id);
+  }
 });
 
 /**
