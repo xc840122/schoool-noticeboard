@@ -7,9 +7,7 @@ import { ConvexTimeToDisplayFormat } from "@/utils/date-convertor"
 const NoticePopUp = async ({
   params
 }: {
-  params: {
-    id: string
-  }
+  params: Promise<{ id: string }>
 }) => {
 
   const { id } = await params
