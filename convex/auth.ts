@@ -14,7 +14,7 @@ export const signUpCodeVerification = mutation({
       // Check if verification information is valid
       if (!verificationInfo
         || verificationInfo.isValid !== true
-        || verificationInfo.class.toLowerCase() !== args.classroom.toLowerCase()) {
+        || verificationInfo.classroom.toLowerCase() !== args.classroom.toLowerCase()) {
         return null;
       }
 
