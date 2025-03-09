@@ -1,4 +1,4 @@
-import { signUpCodeVerificationRepo } from "@/repositories/auth-repo";
+import { signUpCodeVerificationRepo, updateVerificationInfoRepo } from "@/repositories/auth-repo";
 import { ApiResponse } from "@/types/api-type";
 import { VerificationInfoDataModel } from "@/types/convex-type";
 
@@ -25,6 +25,16 @@ export const signUpVerificationService = async (code: string, classroom: string)
 
   } catch (error) {
     console.error(`Failed to get verification information from db: ${error}`);
-    return { result: false, message: "ERROR.UNKNOWN" };
+    throw new Error("ERROR.UNKNOWN");
   }
-} 
+}
+
+export const updateVerificationInfoService = async (id: string, isValid: boolean) => {
+  try {
+    await updateVerificationInfoRepo(id, isValid);
+    return { result: true, message: "SUCCESS.VERIFICATION_UPDATED" };
+  } catch (error) {
+    console.error(`Failed to update verification information in db: ${error}`);
+    throw new Error("ERROR.UNKNOWN");
+  }
+}

@@ -1,5 +1,6 @@
-import { fetchMutation } from "convex/nextjs"
+import { fetchMutation, fetchQuery } from "convex/nextjs"
 import { api } from "../../convex/_generated/api";
+import { Id } from "../../convex/_generated/dataModel";
 // import { Id } from "../../convex/_generated/dataModel";
 
 /**
@@ -10,7 +11,7 @@ import { api } from "../../convex/_generated/api";
  */
 export const signUpCodeVerificationRepo = async (code: string, classroom: string) => {
   try {
-    const verificationInfo = await fetchMutation(
+    const verificationInfo = await fetchQuery(
       api.auth.signUpCodeVerification,
       { code: code, classroom: classroom }
     );
@@ -19,6 +20,23 @@ export const signUpCodeVerificationRepo = async (code: string, classroom: string
       return null;
     }
     return verificationInfo;
+  } catch (error) {
+    console.error(`Failed to update verification information in db: ${error}`);
+    return null;
+  }
+}
+
+/**
+ * Mutation to update the verification information
+ * @param id
+ * @param isValid
+ */
+export const updateVerificationInfoRepo = async (id: string, isValid: boolean) => {
+  try {
+    await fetchMutation(
+      api.auth.updateSignUpInfo,
+      { id: id as Id<'verification_info'>, isValid: isValid }
+    );
   } catch (error) {
     console.error(`Failed to update verification information in db: ${error}`);
     return null;
@@ -45,23 +63,6 @@ export const signUpCodeVerificationRepo = async (code: string, classroom: string
 //     return verificationInfo;
 //   } catch (error) {
 //     console.error(`Failed to get verification information from db: ${error}`);
-//     return null;
-//   }
-// }
-
-/**
- * Mutation to update the verification information
- * @param id
- * @param isValid
- */
-// export const updateVerificationInfoRepo = async (id: string, isValid: boolean) => {
-//   try {
-//     await fetchMutation(
-//       api.auth.updateVerificationInfo,
-//       { id: id as Id<'verification_info'>, isValid: isValid }
-//     );
-//   } catch (error) {
-//     console.error(`Failed to update verification information in db: ${error}`);
 //     return null;
 //   }
 // }

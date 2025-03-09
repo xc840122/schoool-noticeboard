@@ -6,7 +6,7 @@ export const getVerificationInfoModel = async (ctx: QueryCtx, code: string) => {
     return await ctx.db
       .query("verification_info")
       .withIndex("by_code", q => q.eq("code", code))
-      .unique();
+      .first();
   } catch (error) {
     console.error("Failed to retrieve verification info:", error);
     throw new Error("Query failed");
