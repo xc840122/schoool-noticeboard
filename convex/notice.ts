@@ -21,6 +21,7 @@ export const getNotices = query({
     endDate: v.optional(v.number()),
   },
   handler: async (ctx, args) => {
+    console.error("getNotices", args);
     return await getNoticesModel(
       ctx,
       args.classroom,
