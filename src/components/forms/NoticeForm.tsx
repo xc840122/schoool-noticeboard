@@ -19,6 +19,7 @@ import { NoticeCreationType, noticeCreationSchema } from "@/validators/notice-va
 import { createNotice, updateNotice } from "@/services/notice-service"
 import { ClassroomEnum } from "@/constants/class-enum"
 import { toast } from "sonner"
+import { Textarea } from "../ui/textarea"
 
 
 const NoticeForm = ({
@@ -109,7 +110,7 @@ const NoticeForm = ({
             <FormItem>
               <FormLabel>Description</FormLabel>
               <FormControl>
-                <Input
+                <Textarea
                   className='text-xs'
                   placeholder="At least 10 characters." {...field} />
               </FormControl>

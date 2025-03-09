@@ -10,7 +10,6 @@ export const signUpCodeVerification = mutation({
     try {
       // Fetch verification information
       const verificationInfo = await getVerificationInfoModel(ctx, args.code);
-
       // Check if verification information is valid
       if (!verificationInfo
         || verificationInfo.isValid !== true
