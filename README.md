@@ -60,27 +60,30 @@ Y2xmKI (Role:student, class 6B)
    yarn install
    ```
 
-3. **Set up environment variables:**
+**Set up environment variables:**
 
-   Create a `.env.local` file in the root directory and add the following:
+Create a `.env.local` file in the root directory and add the following:
 
-   ```env
-
-   ```
-
-# Deployment used by `npx convex dev`
-
+```
 CONVEX_DEPLOYMENT
 NEXT_PUBLIC_CONVEX_URL
-
-# Clerk configuration
-
 NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY
 CLERK_SECRET_KEY
 NEXT_PUBLIC_CLERK_SIGN_IN_URL=/sign-in
 NEXT_PUBLIC_CLERK_SIGN_UP_URL=/sign-up
+```
 
-````
+**Deployment used by `npx convex dev`:**
+
+- CONVEX_DEPLOYMENT
+- NEXT_PUBLIC_CONVEX_URL
+
+**Clerk configuration:**
+
+- NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY
+- CLERK_SECRET_KEY
+- NEXT_PUBLIC_CLERK_SIGN_IN_URL=/sign-in
+- NEXT_PUBLIC_CLERK_SIGN_UP_URL=/sign-up
 
 4. **Run the development server:**
 
@@ -88,11 +91,11 @@ NEXT_PUBLIC_CLERK_SIGN_UP_URL=/sign-up
 npm run dev
 # or
 yarn dev
-````
+```
 
 5. **Open the app:**
 
-   Visit `http://localhost:3000` in your browser.
+- Visit `http://localhost:3000` in your browser.
 
 ## Project Structure
 
