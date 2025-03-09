@@ -51,7 +51,7 @@ export default function SignUpForm() {
     const validationResponse = await signUpVerificationService(data.verificationCode, data.classroom);
 
     // Handle validation response
-    switch (validationResponse.messageKey) {
+    switch (validationResponse.message) {
       case 'ERROR.CODE_NOT_FOUND':
         setServerError(AUTH_MESSAGES.ERROR.CODE_NOT_FOUND);
         return;
