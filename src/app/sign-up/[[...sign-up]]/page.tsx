@@ -119,7 +119,7 @@ export default function SignUpForm() {
                 render={({ field }) => (
                   <FormItem>
                     <Label>Username</Label>
-                    <Input {...field} placeholder='Enter your username' />
+                    <Input {...field} placeholder='Username must be 3-16 characters' />
                     <FormMessage />
                   </FormItem>
                 )}
@@ -132,7 +132,7 @@ export default function SignUpForm() {
                 render={({ field }) => (
                   <FormItem>
                     <Label>Password</Label>
-                    <Input {...field} type='password' placeholder='Enter your password' />
+                    <Input {...field} type='password' placeholder='Password must be at least 8 characters' />
                     <FormMessage />
                   </FormItem>
                 )}
@@ -158,7 +158,7 @@ export default function SignUpForm() {
                 render={({ field }) => (
                   <FormItem>
                     <Label>Classroom Code</Label>
-                    <Input {...field} placeholder='Enter classroom code' />
+                    <Input {...field} placeholder='4 characters' />
                     <FormMessage />
                   </FormItem>
                 )}
@@ -171,7 +171,7 @@ export default function SignUpForm() {
                 render={({ field }) => (
                   <FormItem>
                     <Label>VerificationCode Code</Label>
-                    <Input {...field} placeholder='Enter verification code' />
+                    <Input {...field} placeholder='6-digit alphanumeric ID' />
                     <FormMessage />
                   </FormItem>
                 )}
