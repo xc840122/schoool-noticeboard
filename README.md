@@ -1,63 +1,163 @@
-/app
-/api
-/user
-route.ts # API route (calls service layer)
-/dashboard # (Client components)
-layout.tsx
-page.tsx
+# School Noticeboard
 
-/components # Reusable UI components
-/hooks # Custom React hooks (e.g., useAuth.ts)
+A Next.js project for managing classroom noticeboard with role-based authentication (Teacher and Student). Teachers can post tasks, and students can view them in real-time without refreshing the page. Built with modern technologies like TypeScript, Convex, Clerk Authentication, ShadCN UI, React Hook Form, and Zod.
 
-/lib
-prisma.ts # Prisma DB connection
-validation.ts # Zod validation schemas
+## Features
 
-/services
-user-service.ts # Business logic for users
-auth-service.ts # Authentication logic
+- **Role-Based Authentication**: Two roles—Teacher and Student.
+- **Real-Time Task Updates**: Leverages Convex for real-time updates.
+- **Classroom Code**: Users must provide a 6-digit alphanumeric classroom code during sign-up.
+- **Form Validation**: React Hook Form and Zod for robust form validation.
+- **Modern UI**: ShadCN UI components for a sleek and responsive design.
+- **Data & Business Layer**: Separation of concerns for complex functions.
 
-/data
-user-repository.ts # Database queries for users
-task-repository.ts # Database queries for tasks
+## Technologies Used
 
-/utils
-helpers.ts # General helper functions
-constants.ts # Shared constants
+- **Next.js**: React framework for server-side rendering and static site generation.
+- **TypeScript**: Strongly typed JavaScript for better developer experience.
+- **Clerk Authentication**: Easy-to-integrate authentication solution.
+- **Convex**: Real-time database and backend functions.
+- **ShadCN UI**: Beautiful and customizable UI components.
+- **React Hook Form**: Efficient form management with validation.
+- **Zod**: Schema validation for form inputs.
+- **Prettier**: Code formatting for consistent style.
 
-/types
-user.ts # TypeScript interfaces
-task.ts # TypeScript interfaces
+## Getting Started
 
-/public # Static assets
-/styles # Global styles
+### Testing data
 
-Create A Project in next.js using these technologies:
+- visit https://schoool-noticeboard.vercel.app/sign-in
+- test account: teacher/11111111, student/11111111
+- Verification code and related class for testing purpose: (each code can use just once,u can email me to reset)
 
-Typescript, Prettier
+OtHUuL (Role:teacher, class 3A)
+3V5kd4 (Role:student, class 3A)
 
-Clerk Authentication:
+fISHkz (Role:teacher, class 6B)
+Y2xmKI (Role:student, class 6B)
 
-Convex:
+### Prerequisites
 
-ShadCN UI:
+- Node.js (v18 or higher)
+- npm or yarn
+- Convex account
+- Clerk account
 
-React Hook Form:
+### Installation
 
-The app needs two role-based authentication—one for someone signing in as a teacher and another for a student.
+1. **Clone the repository:**
 
-A teacher can post a task and display it to the users registered in the class.
+   ```bash
+   git clone https://github.com/xc840122/schoool-noticeboard.git
+   cd schoool-noticeboard
+   ```
 
-When a teacher or student signs up, they must add their classroom code and put in a 6-digit alphanumerical ID.
+2. **Install dependencies:**
 
-Add functionality that users don’t have to refresh the screen to see new tasks (leverage convex)
+   ```bash
+   npm install
+   # or
+   yarn install
+   ```
 
-Please use React Hook Form and Zod to validate user input.
+**Set up environment variables:**
 
-Please also use Git/GitHub along the way, making commits as if you were working alongside a team.
+Create a `.env.local` file in the root directory and add the following:
 
-Please also use a data & business layer when doing complex functions.
+```
+CONVEX_DEPLOYMENT
+NEXT_PUBLIC_CONVEX_URL
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY
+CLERK_SECRET_KEY
+NEXT_PUBLIC_CLERK_SIGN_IN_URL=/sign-in
+NEXT_PUBLIC_CLERK_SIGN_UP_URL=/sign-up
+```
 
-The user must need to be logged in.
+**Deployment used by `npx convex dev`:**
 
-Please deploy your application and email in your deployed link and GitHub repository.
+- CONVEX_DEPLOYMENT
+- NEXT_PUBLIC_CONVEX_URL
+
+**Clerk configuration:**
+
+- NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY
+- CLERK_SECRET_KEY
+- NEXT_PUBLIC_CLERK_SIGN_IN_URL=/sign-in
+- NEXT_PUBLIC_CLERK_SIGN_UP_URL=/sign-up
+
+4. **Run the development server:**
+
+```bash
+npm run dev
+# or
+yarn dev
+```
+
+5. **Open the app:**
+
+- Visit `http://localhost:3000` in your browser.
+
+## Project Structure
+
+```
+school-noticeboard
+├── convex                          # Backend logic and database models for Convex
+│   ├── _generated                  # Auto-generated files by Convex (e.g., types, queries, mutations)
+│   └── models                      # Defines data models and schemas for the database
+├── public                          # Stores static assets like images, fonts, and icons
+└── src                             # Main source code directory for the application
+    ├── actions                     # Reusable server actions or functions for handling business logic
+    ├── app                         # Next.js App Router structure for organizing routes and pages
+    │   ├── (dashboard)             # Group route for dashboard-related pages
+    │   │   └── notice              # Notice-related functionality
+    │   │       ├── @modal          # Intercepting routes for modals
+    │   │       │   └── (.)[id]     # Modal route for a specific notice ID
+    │   │       └── [id]            # Dynamic route for a specific notice ID
+    │   ├── sign-in                 # Sign-in functionality
+    │   │   └── [[...sign-in]]      # Catch-all route for sign-in pages
+    │   ├── sign-up                 # Sign-up functionality
+    │   │   └── [[...sign-up]]      # Catch-all route for sign-up pages
+    │   └── user-profile            # User profile functionality
+    │       └── [[...user-profile]] # Catch-all route for user profile pages
+    ├── components                  # Reusable UI components
+    │   ├── forms                   # Form-related components
+    │   └── ui                      # UI components (e.g., buttons, cards, modals)
+    ├── constants                   # Application-wide constants
+    │   └── messages                # Constants for messages or notifications
+    ├── helper                      # Helper functions and utilities
+    ├── hooks                       # Custom React hooks
+    ├── lib                         # Library or utility functions
+    ├── repositories                # Data access layer for interacting with the database
+    ├── services                    # Business logic and service layer
+    ├── types                       # TypeScript type definitions
+    ├── utils                       # Utility functions and helpers
+    └── validators                  # Validation logic (e.g., Zod schemas)
+```
+
+## License
+
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+
+```
+MIT License
+
+Copyright (c) 2025 Peter(Chi Xu)
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+```
