@@ -11,20 +11,20 @@ export const signUpVerificationService = async (code: string, classroom: string)
 
     // // If no verification information is found,return false
     if (!verificationInfo)
-      return { result: false, messageKey: "ERROR.CODE_NOT_FOUND" };
+      return { result: false, message: "ERROR.CODE_NOT_FOUND" };
 
     // If the verification code is invalid, return false
     if (verificationInfo.isValid !== true) {
-      return { result: false, messageKey: "ERROR.INVALID_CODE" };
+      return { result: false, message: "ERROR.INVALID_CODE" };
     }
     // If the classroom doesn't match, return false
-    if (verificationInfo.class.toLowerCase() !== classroom.toLowerCase()) {
-      return { result: false, messageKey: "ERROR.CLASSROOM_NOT_MATCH" };
+    if (verificationInfo.classroom.toLowerCase() !== classroom.toLowerCase()) {
+      return { result: false, message: "ERROR.CLASSROOM_NOT_MATCH" };
     }
-    return { result: false, messageKey: "SUCCESS.VERIFICATION_SUCCESSFUL", data: verificationInfo };;
+    return { result: false, message: "SUCCESS.VERIFICATION_SUCCESSFUL", data: verificationInfo };;
 
   } catch (error) {
     console.error(`Failed to get verification information from db: ${error}`);
-    return { result: false, messageKey: "ERROR.UNKNOWN" };
+    return { result: false, message: "ERROR.UNKNOWN" };
   }
 } 
