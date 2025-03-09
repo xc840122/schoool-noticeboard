@@ -1,10 +1,10 @@
 'use client';
 
-import { useClerk, useSignUp } from '@clerk/nextjs';
+import { useClerk, useSignUp, useUser } from '@clerk/nextjs';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { signUpVerificationService } from '@/services/auth-service';
+import { signUpVerificationService, updateVerificationInfoService } from '@/services/auth-service';
 import { SignUpType, signUpSchema } from '@/validators/auth-validator';
 import { AUTH_MESSAGES } from '@/constants/messages/auth-message';
 import { useRouter } from 'next/navigation';
@@ -13,12 +13,14 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Form, FormField, FormItem, FormMessage } from '@/components/ui/form';
+import { toast } from 'sonner';
 
 export default function SignUpForm() {
   const { isLoaded, signUp, setActive } = useSignUp();
   const router = useRouter();
   const [serverError, setServerError] = useState<string | null>(null);
-  const { signOut } = useClerk();
+  const { session } = useClerk();
+  const { isSignedIn } = useUser();
 
   // Initialize react-hook-form with Zod validation
   const form = useForm<SignUpType>({
@@ -69,7 +71,8 @@ export default function SignUpForm() {
 
     try {
       // Avoid single-session problem, sign out before sign-up
-      await signOut();
+      // if (isSignedIn) await signOut();
+      if (isSignedIn) await session?.remove();
       // Proceed with sign-up if validation is successful
       const signUpResponse = await signUp.create({
         username: data.username,
@@ -80,18 +83,25 @@ export default function SignUpForm() {
         },
       });
 
+      // Check if sign-up is complete,set error message if not
       if (signUpResponse.status !== 'complete') {
         setServerError('Signup failed');
         return;
       }
 
-      // Auto login after successful sign-up
+      // Update verification information
+      const result = await updateVerificationInfoService(validationResponse.data?._id as string, false);
+      if (result?.result) {
+        toast.success(result.message);
+      }
+
+      // Set active session
       if (signUpResponse.createdSessionId) {
         await setActive({ session: signUpResponse.createdSessionId });
       }
 
       // Redirect user to home page
-      router.push('/');
+      router.replace('/');
     } catch (error) {
       if (error instanceof Error) {
         setServerError(error.message || 'Signup failed');

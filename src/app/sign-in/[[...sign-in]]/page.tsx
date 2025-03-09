@@ -1,6 +1,6 @@
 'use client';
 
-import { SignUpButton, useSignIn } from '@clerk/nextjs';
+import { SignUpButton, useClerk, useSignIn, useUser } from '@clerk/nextjs';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -16,6 +16,8 @@ export default function SignInPage() {
   const { isLoaded, signIn, setActive } = useSignIn();
   const router = useRouter();
   const [serverError, setServerError] = useState<string | null>(null);
+  const { session } = useClerk();
+  const { isSignedIn } = useUser();
 
   const form = useForm<SignInType>({
     resolver: zodResolver(signInSchema),
@@ -29,41 +31,34 @@ export default function SignInPage() {
     setServerError(null);
 
     if (!isLoaded) {
-      setServerError('The sign-in service is loading. Please try again later.');
+      setServerError('The sign-in service is loading. Please wait...');
       return;
     }
 
     try {
-      // Sign in with Clerk
+      // Avoid single-session problem, remove current session before sign-up
+      if (isSignedIn) await session?.remove();
+      // Attempt to sign in
       const signInResponse = await signIn.create({
         identifier: data.identifier,
         password: data.password,
       });
 
-      // Handle sign-in response,check if sign-in is complete
+      // Check if sign-in is complete
       if (signInResponse.status !== 'complete') {
-        setServerError('Signin failed');
+        setServerError('Sign-in failed. Please try again.');
         return;
       }
 
-      // Sign in action
+      // Set active session
       if (signInResponse.createdSessionId) {
         await setActive({ session: signInResponse.createdSessionId });
       }
 
-      // Handle loading state
-      if (!isLoaded) {
-        return null;
-      }
-      // Redirect to home page
-      router.push('/');
-
+      // Redirect to home page after successful sign-in
+      router.replace('/');
     } catch (error) {
-      if (error instanceof Error) {
-        setServerError(error.message || 'Signin failed');
-      } else {
-        setServerError('Signin failed');
-      }
+      setServerError(error instanceof Error ? error.message : 'Sign-in failed.');
     }
   }
 
