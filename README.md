@@ -1,4 +1,4 @@
-# Classroom Task Manager
+# School Noticeboard
 
 A Next.js project for managing classroom noticeboard with role-based authentication (Teacher and Student). Teachers can post tasks, and students can view them in real-time without refreshing the page. Built with modern technologies like TypeScript, Convex, Clerk Authentication, ShadCN UI, React Hook Form, and Zod.
 
