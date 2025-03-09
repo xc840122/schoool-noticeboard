@@ -12,7 +12,7 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Form, FormField, FormItem, FormMessage } from '@/components/ui/form';
 
-export const SignInPage = () => {
+export default function SignInPage() {
   const { isLoaded, signIn, setActive } = useSignIn();
   const router = useRouter();
   const [serverError, setServerError] = useState<string | null>(null);
@@ -129,4 +129,4 @@ export const SignInPage = () => {
   );
 };
 
-export default SignInPage;
+// export default SignInPage;
