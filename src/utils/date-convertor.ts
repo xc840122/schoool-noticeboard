@@ -18,6 +18,9 @@ export const ConvexTimeToDisplayFormat = (creationTime: number) => {
  * @param date date string(yyyy-mm-dd)
  * @returns 
  */
-export const DateToConvexTime = (date: string) => {
-  return new Date(date).getTime();
+export const DateToConvexTime = (date: string, startDate: boolean) => {
+  if (startDate) {
+    return (new Date(date)).setHours(0, 0, 0, 0);
+  }
+  return (new Date(date)).setHours(23, 59, 59, 999);
 }

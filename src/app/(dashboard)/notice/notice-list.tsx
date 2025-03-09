@@ -89,10 +89,10 @@ export const NoticeListContent = ({
       header: 'Time',
       accessor: 'time',
     },
-    role === 'teacher' ? {
+    {
       header: 'Actions',
       accessor: 'action',
-    } : { header: '', accessor: 'action' }
+    }
   ];
 
   return (

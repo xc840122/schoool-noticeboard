@@ -18,8 +18,8 @@ const NoticeListWrapper = () => {
     {
       classroom: classroom,
       keyword: searchValue,
-      startDate: DateToConvexTime(startDate),
-      endDate: DateToConvexTime(endDate)
+      startDate: DateToConvexTime(startDate, true),
+      endDate: DateToConvexTime(endDate, false)
     }
   ) ?? [];
 
