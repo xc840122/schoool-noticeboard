@@ -8,7 +8,7 @@ import Link from 'next/link';
 const NoticeDetailPage = async ({
   params
 }: {
-  params: { id: string }
+  params: Promise<{ id: string }>
 }) => {
   const { id } = await params;
 
