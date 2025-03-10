@@ -6,19 +6,16 @@ import Table from "@/components/Table";
 import { TableCell, TableRow } from "@/components/ui/table";
 import NoticeForm from "@/components/forms/NoticeForm";
 import { NoticeDataModel } from "@/types/convex-type";
-import Loading from "@/components/Loading";
 import { paginatedNotices } from "@/services/notice-service";
 import { ConvexTimeToDisplayFormat } from "@/utils/date-convertor";
 import { ClassroomEnum } from "@/constants/class-enum";
 import { ITEM_PER_PAGE } from "@/lib/settings";
-import { SignIn } from "@clerk/nextjs";
 import DeleteNoticeForm from "@/components/forms/DeleteNoticeForm";
 import { Rows3 } from "lucide-react";
 import Link from "next/link";
 
 export const NoticeListContent = ({
   pageNum,
-  status,
   role,
   notices,
   classroom,
@@ -31,9 +28,6 @@ export const NoticeListContent = ({
   notices: NoticeDataModel[],
   mode?: string
 }) => {
-  // Handle the Loading, unAuthenticated
-  if (!notices) return <Loading />;
-  if (status === 'unAuthenticated') return <SignIn />;
 
   // Get total pages
   const totalPages = Math.ceil(notices.length / ITEM_PER_PAGE);
