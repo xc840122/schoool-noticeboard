@@ -12,7 +12,7 @@ type Column = {
   accessor: string;
 }
 
-const TableView = async <T,>({
+const TableView = <T,>({
   columns,
   renderRow,
   data }: {
