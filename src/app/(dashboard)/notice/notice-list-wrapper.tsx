@@ -6,6 +6,8 @@ import { useMetadata } from "@/hooks/use-metadata";
 import { useURLParams } from "@/hooks/use-params";
 import { api } from "../../../../convex/_generated/api";
 import NoticeListContent from "./notice-list";
+import Loading from "@/components/Loading";
+import { SignIn } from "@clerk/nextjs";
 
 const NoticeListWrapper = () => {
   // Get search value, start date, end date, page number from URL
@@ -22,6 +24,10 @@ const NoticeListWrapper = () => {
       endDate: DateToConvexTime(endDate, false)
     }
   ) ?? [];
+
+  // Handle the Loading, unAuthenticated
+  if (notices === undefined) return <Loading />;
+  if (status === 'unAuthenticated') return <SignIn />;
 
   return (
     <NoticeListContent
