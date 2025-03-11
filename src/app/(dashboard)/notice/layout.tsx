@@ -1,4 +1,3 @@
-import type React from "react"
 export default function NoticeLayout({
   children,
   modal,
